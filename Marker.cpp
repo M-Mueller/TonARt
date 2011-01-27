@@ -4,7 +4,9 @@ Marker::Marker()
 	: m_id(-1)
 {
 	for(int i=0; i<16; i++)
+	{
 		m_position[i]=0;
+	}
 }
 
 Marker::Marker(unsigned int id, float* position)
@@ -18,7 +20,9 @@ Marker::Marker(const Marker &m)
 	:m_id(m.getID())
 {
 	for(int i=0; i<16; i++)
+	{
 		m_position[i]=m.getTransformation()[i];
+	}
 }
 
 Marker::~Marker()
@@ -33,7 +37,7 @@ cv::Vec3f Marker::getPosition()
 
 bool Marker::isValid()
 {
-	if(m_id!=-1)
+	if(m_id!=(unsigned int)-1)
 		return true;
 	else
 		return false;
@@ -48,3 +52,10 @@ const float* Marker::getTransformation() const
 {
 	return m_position;
 }
+
+void Marker::getTransformationGL(GLfloat* matrix)
+{
+//	for(int i=0; i<16; i++)
+//		matrix[i]=m_position[i];
+}
+

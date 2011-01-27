@@ -366,6 +366,5 @@ void Tracking::getMarkers(std::vector<Marker> &markersFound)
 		if(cv::waitKey(30) >= 0) break;
 #endif
 	}
-	//return markersFound;
 }
 

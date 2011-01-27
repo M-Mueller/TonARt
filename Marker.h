@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "cv.h"
+#include "GL/glew.h"
 
 class Marker
 {
@@ -17,7 +18,7 @@ public:
 	cv::Vec3f getPosition();
 	cv::Vec3f getRotation();
 	const float* getTransformation() const;
-	void getTransformationGL(float* matrix);
+	void getTransformationGL(GLfloat* matrix);
 
 	bool isValid();
 

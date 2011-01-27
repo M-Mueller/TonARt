@@ -1,8 +1,6 @@
-//compile with g++ -Wall -L/usr/local/lib -lglut -lGLU main.cpp -o Blatt6
-
 #include <iostream>
+#include <GL/glew.h>
 #include <GL/glut.h>
-#include <GL/glu.h>
 
 #include <cv.h>
 
@@ -20,13 +18,18 @@ void reshape(int width, int height);
 
 int main(int argc, char** argv)
 {
-
 	//init OpenGL and GLUT stuff
 	glutInit(&argc, argv);
 	glutInitWindowSize(640, 480);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
 
 	glutCreateWindow("TonARt");
+
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
+	{
+		std::cout << "GLEW init failed" <<std::endl;
+	}
 
 	glutDisplayFunc(display);
 	glutIdleFunc(display);

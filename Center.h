@@ -4,10 +4,13 @@
 #include <map>
 #include <iostream>
 
+#include "GL/glew.h"
 #include "GL/glut.h"
+#include "cv.h"
 
 #include "Marker.h"
 #include "Instrument.h"
+#include "Bass.h"
 
 class Center
 {
@@ -23,7 +26,7 @@ public:
 private:
 	Marker centralPoint;
 
-	std::multimap<int, Instrument> m_song; //key: ring, the instrument is on
+	std::multimap<int, Instrument*> m_song; //key: ring, the instrument is on
 
 	float rate;
 

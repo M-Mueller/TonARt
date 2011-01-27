@@ -29,14 +29,19 @@ void Center::update(std::vector<Marker> marker)
 	{
 		int distance = length((*i).getPosition()-centralPoint.getPosition());
 
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
+		Bass bass((*i));
 
-		glLoadTransposeMatrixf((*i).getTransformation());
+		bass.draw();
 
-		glutSolidSphere(0.01, 8,8);
-
-		glPopMatrix();
+//		glMatrixMode(GL_MODELVIEW);
+//		glPushMatrix();
+//
+//		glLoadTransposeMatrixf((*i).getTransformation());
+//		glLoadMatrixf(matrix);
+//
+//		glutSolidSphere(0.01, 8,8);
+//
+//		glPopMatrix();
 	}
 }
 
