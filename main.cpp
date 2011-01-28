@@ -1,8 +1,15 @@
 #include <iostream>
-#include <GL/glew.h>
-#include <GL/glut.h>
 
+#include <GL/glew.h>
 #include <cv.h>
+
+#ifdef __APPLE__
+#include <glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+
 
 #include "Tracking.h"
 #include "Center.h"

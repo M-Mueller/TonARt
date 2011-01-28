@@ -4,9 +4,14 @@
 #include <map>
 #include <iostream>
 
-#include "GL/glew.h"
-#include "GL/glut.h"
-#include "cv.h"
+#include <GL/glew.h>
+#include <cv.h>
+
+#ifdef __APPLE__
+#include <glut.h>
+#else
+#include <GL/glut.h>
+#endif
 
 #include "Marker.h"
 #include "Instrument.h"
