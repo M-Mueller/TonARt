@@ -30,7 +30,7 @@ cv::Mat Tracking::getFrame()
 
 float Tracking::length(cv::Point p)
 {
-	return sqrt((double)(p.x*p.x + p.y*p.y));
+	return sqrt((float)(p.x*p.x + p.y*p.y));
 }
 
 int Tracking::subpixSampleSafe ( const IplImage* pSrc, cv::Point2f p )
@@ -80,14 +80,14 @@ cv::Point2f Tracking::getEdgePos(cv::Mat stripe)
 	//f(x) = ax²+bx+c
 	//f'(x) = 2ax+b
 	//maximum: f'(x)=0 => x= -b/2a
-	float a = (float(y2) + float(y1) - 2.0*float(y0) )/2.0;
+	float a = (float(y2) + float(y1) - 2.0f*float(y0) )/2.0f;
 	float b = float(y1) - float(y0) - a;
 
 	if(a==0)
 		return maximumLoc;
 	else
 	{
-		return cv::Point2f(maximumLoc.x-(b/(2.0*a)), maximumLoc.y);
+		return cv::Point2f(maximumLoc.x-((float)b/(2.0f*a)), (float)maximumLoc.y);
 	}
 }
 
@@ -171,7 +171,7 @@ void Tracking::getCorners(cv::Vec4f* borders, cv::Point2f* corners)
 			b = cv::Point2f(borders[0][2], borders[0][3]); //center of line two
 		}
 
-		int s = ( (v.y*b.x - v.y*a.x + v.x*a.y - v.x*b.y)/v.x ) / (w.y - (v.y*w.x)/v.x);
+		int s = (int)(( (v.y*b.x - v.y*a.x + v.x*a.y - v.x*b.y)/v.x ) / (w.y - (v.y*w.x)/v.x));
 
 		corners[c] = s*w + b;
 	}
@@ -366,7 +366,7 @@ void Tracking::getMarkers(std::vector<Marker> &markersFound)
 		float markerPosition[16];
 		CvPoint2D32f cornersCStyle[4];
 		toCstyle(corners, cornersCStyle, 4);
-		estimateSquarePose(markerPosition, cornersCStyle, 0.042);
+		estimateSquarePose(markerPosition, cornersCStyle, 0.042f);
 
 		markersFound.push_back(Marker(markerID, markerPosition));
 

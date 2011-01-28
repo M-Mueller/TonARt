@@ -1,3 +1,7 @@
+#ifdef _MSC_VER 
+#pragma warning(disable : 4305)
+#endif
+
 #include "Cube.h"
 
 int Cube::numCubeVerts = 8;
@@ -74,5 +78,8 @@ void Cube::getFaces(GLuint* f)
 			f[i*3+j] = CubeFaces[i][j];
 		}
 	}
-	return 0;
 }
+
+#ifdef _MSC_VER 
+#pragma warning(default : 4305)
+#endif

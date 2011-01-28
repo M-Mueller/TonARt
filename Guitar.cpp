@@ -4,6 +4,9 @@
  *  Created on: 27.01.2011
  *      Author: keen
  */
+#ifdef _MSC_VER 
+#pragma warning(disable: 4305)
+#endif
 
 #include "Guitar.h"
 
@@ -2670,3 +2673,6 @@ GLuint Guitar::GuitarFaces [][3] = {
 };
 
 
+#ifdef _MSC_VER 
+#pragma warning(default:4305)
+#endif
