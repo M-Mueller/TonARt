@@ -30,7 +30,7 @@ cv::Mat Tracking::getFrame()
 
 float Tracking::length(cv::Point p)
 {
-	return sqrt(p.x*p.x + p.y*p.y);
+	return sqrt((double)(p.x*p.x + p.y*p.y));
 }
 
 int Tracking::subpixSampleSafe ( const IplImage* pSrc, cv::Point2f p )
@@ -101,7 +101,7 @@ cv::Point2f Tracking::getSubpixelBorderPosFromStripe(cv::Mat &input, cv::Point2f
 	{
 		for(int x=0; x<stripeWidth; x++)
 		{
-			stripe.at<char>(x,y) = subpixSampleSafe(&(IplImage) input, (stripeStart + x*stripeX + y*stripeY));//input.at<char>(QVectorToCvPoint(stripeStart + x*stripeX + y*stripeY));
+			stripe.at<unsigned char>(x,y) = subpixSampleSafe(&(IplImage) input, (stripeStart + x*stripeX + y*stripeY));//input.at<char>(QVectorToCvPoint(stripeStart + x*stripeX + y*stripeY));
 		}
 	}
 
