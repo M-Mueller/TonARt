@@ -16,10 +16,10 @@ void Center::update(std::vector<Marker> marker)
 	//find center
 	for(std::vector<Marker>::iterator i=marker.begin(); i<marker.end(); i++)
 	{
-		if((*i).getID()==626)
+		if(i->getID() == 626)
 		{
 			this->centralPoint=(*i);
-			marker.erase(i);
+			//marker.erase(i);
 		}
 		//if central marker not found->use old information
 	}

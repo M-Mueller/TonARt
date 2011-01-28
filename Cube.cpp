@@ -74,4 +74,5 @@ int Cube::getFaces(GLuint* f)
 			f[i*3+j] = CubeFaces[i][j];
 		}
 	}
+	return 0;
 }
