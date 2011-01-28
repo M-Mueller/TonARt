@@ -10,7 +10,7 @@
 
 #include "Marker.h"
 #include "Instrument.h"
-#include "Bass.h"
+#include "Guitar.h"
 
 class Center
 {

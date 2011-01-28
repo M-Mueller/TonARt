@@ -11,7 +11,6 @@ Mesh::~Mesh()
 {
 	glDeleteBuffers(1, &vbo);
 	glDeleteBuffers(1, &ibo);
-	delete data;
 }
 
 void Mesh::init()

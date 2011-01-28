@@ -29,9 +29,9 @@ void Center::update(std::vector<Marker> marker)
 	{
 		int distance = length((*i).getPosition()-centralPoint.getPosition());
 
-		Bass bass((*i));
+		Guitar g((*i));
 
-		bass.draw();
+		g.draw();
 
 //		glMatrixMode(GL_MODELVIEW);
 //		glPushMatrix();

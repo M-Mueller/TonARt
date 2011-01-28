@@ -65,7 +65,7 @@ void Cube::getNormals(GLfloat* n)
 
 }
 
-int Cube::getFaces(GLuint* f)
+void Cube::getFaces(GLuint* f)
 {
 	for(int i=0; i<getFaceCount(); i++)//iterate over all faces
 	{
