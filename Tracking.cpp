@@ -58,9 +58,19 @@ cv::Point2f Tracking::getEdgePos(cv::Mat stripe)
 	cv::Point maximumLoc;
 	cv::minMaxLoc(stripe, NULL, &max, NULL, &maximumLoc);
 
-	unsigned char y0 = stripe.at<unsigned char>(maximumLoc);	//x=0
-	unsigned char y1 = stripe.at<unsigned char>(maximumLoc.x+1, maximumLoc.y); //x=1
-	unsigned char y2 = stripe.at<unsigned char>(maximumLoc.x-1, maximumLoc.y); //x=-1
+	unsigned char y0 = stripe.at<unsigned char>(maximumLoc.y, maximumLoc.x);	//x=0
+
+	unsigned char y1;
+	if(maximumLoc.x<stripe.cols-1)
+		y1 = stripe.at<unsigned char>(maximumLoc.y, maximumLoc.x+1); //x=1
+	else
+		y1 = y0;
+
+	unsigned char y2;
+	if(maximumLoc.x>=1)
+		y2 = stripe.at<unsigned char>(maximumLoc.y, maximumLoc.x-1); //x=-1
+	else
+		y2 = y0;
 
 	if(! (y0>=y1 && y0>=y2) )	//bug in cv??
 	{

@@ -10,8 +10,14 @@
 
 #include "Marker.h"
 #include "Instrument.h"
-#include "Bass.h"
+#include "Guitar.h"
 
+/**
+ * This class represents the center from where the tones are played according to their distance to the center.
+ * When update() is called, it scans the list first for the marker ID which corresponds to the center and then for
+ * IDs representing an instrument. This instruments are
+ * linked to the closed ring
+ */
 class Center
 {
 public:

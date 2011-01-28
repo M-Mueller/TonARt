@@ -5,9 +5,6 @@
 class Mesh
 {
 public:
-	/**
-	 * Mesh takes ownership of ObjInterface
-	 */
 	Mesh(ObjInterface* d);
 	virtual ~Mesh();
 

@@ -12,7 +12,7 @@ public:
 	int getFaceCount(){return numCubeFaces;}
 	virtual void getVertices(GLfloat*);
 	virtual void getNormals(GLfloat*);
-	virtual int getFaces(GLuint*);
+	virtual void getFaces(GLuint*);
 
 private:
 	static int numCubeVerts;

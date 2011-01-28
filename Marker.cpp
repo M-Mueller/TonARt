@@ -5,7 +5,10 @@ Marker::Marker()
 {
 	for(int i=0; i<16; i++)
 	{
-		m_position[i]=0;
+		if(i%5==0)	//diagonal elements are 0,5,10 and 15
+			m_position[i]=1.0f;
+		else
+			m_position[i]=0.0f;
 	}
 }
 
@@ -30,7 +33,7 @@ Marker::~Marker()
 
 }
 
-cv::Vec3f Marker::getPosition()
+cv::Vec3f Marker::getPosition() const
 {
 	return cv::Vec3f(m_position[3], m_position[7], m_position[11]);
 }
@@ -51,11 +54,5 @@ unsigned int Marker::getID() const
 const float* Marker::getTransformation() const
 {
 	return m_position;
-}
-
-void Marker::getTransformationGL(GLfloat* matrix)
-{
-//	for(int i=0; i<16; i++)
-//		matrix[i]=m_position[i];
 }
 

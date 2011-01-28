@@ -3,6 +3,10 @@
 
 #include "graphicsDefs.h"
 
+/**
+ * Abstract base class for classes which contain data that can be used by the Mesh class.
+ * See Cube for an example implementation
+ */
 class ObjInterface
 {
 public:
@@ -10,7 +14,7 @@ public:
 	virtual void getVertices(GLfloat*)=0;
 	virtual void getNormals(GLfloat*)=0;
 	virtual int getFaceCount()=0;
-	virtual int getFaces(GLuint*)=0;
+	virtual void getFaces(GLuint*)=0;
 };
 
 #endif
