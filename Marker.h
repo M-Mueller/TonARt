@@ -4,7 +4,8 @@
 #include <iostream>
 
 #include "cv.h"
-#include "GL/glew.h"
+#include <GL/glew.h>
+
 
 /**
  * Represents a marker found by the camera. The marker has an ID and a 3D position in matrix form.

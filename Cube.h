@@ -1,5 +1,6 @@
-#include "ObjInterface.h"
 #include <GL/glew.h>
+#include "ObjInterface.h"
+
 
 class Cube
 	: public ObjInterface
