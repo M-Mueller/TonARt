@@ -91,7 +91,12 @@ void Center::play()
 			i->second->play();
 		}
 	}
+
+#ifdef _WIN32
 	Sleep(200);
+#else
+	usleep(200000);
+#endif
 
 
 	for(std::multimap<int,Instrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
