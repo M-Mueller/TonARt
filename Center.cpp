@@ -34,6 +34,9 @@ void Center::update(std::vector<Marker> marker)
 	//find intruments
 	for(std::vector<Marker>::iterator i=marker.begin(); i<marker.end(); i++)
 	{
+		if(i->getID() == 626)
+			continue;
+
 		float distance = length(i->getPosition()-centralPoint.getPosition());
 		//std::cout << "Marker ID: " << i->getID() << " Distance: " << distance << std::endl;
 
@@ -89,6 +92,7 @@ void Center::play()
 		}
 	}
 	Sleep(200);
+
 
 	for(std::multimap<int,Instrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
 	{
