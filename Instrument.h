@@ -14,6 +14,7 @@ public:
 	virtual void draw();
 	virtual void play();
 	virtual void stopPlaying();
+	virtual Marker getMarker()=0;
 
 	static RtMidiOut* s_midiout;
 	static bool isMidiConnected;

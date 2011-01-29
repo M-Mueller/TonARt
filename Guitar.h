@@ -26,6 +26,7 @@ public:
 
 	virtual void draw();
 	virtual void play();
+	virtual Marker getMarker();
 
 	virtual int getVertexCount();
 	virtual void getVertices(GLfloat*);

@@ -41,7 +41,7 @@ void Guitar::play()
 
 	// Note On: 144, 64, 90
 	message[0] = 0x90;
-	message[1] = 64;	// tonhöhe
+	message[1] = 64;	// tonhï¿½he
 	message[2] = 64;	// dynamik
 	Instrument::s_midiout->sendMessage( &message );
 
@@ -51,7 +51,7 @@ void Guitar::stopPlaying()
 {
 	std::vector<unsigned char> message;
 	message.push_back(0x80);
-	message.push_back(64);	// tonhöhe
+	message.push_back(64);	// tonhï¿½he
 	message.push_back(64);	// dynamik
 	Instrument::s_midiout->sendMessage( &message );
 }
@@ -68,6 +68,11 @@ void Guitar::draw()
 
 	glPopMatrix();
 
+}
+
+Marker Guitar::getMarker()
+{
+	return position;
 }
 
 int Guitar::getVertexCount()

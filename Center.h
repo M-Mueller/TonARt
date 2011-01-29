@@ -3,6 +3,7 @@
 
 #include <map>
 #include <iostream>
+#include <vector>
 
 #include <GL/glew.h>
 #include <cv.h>
@@ -16,6 +17,7 @@
 #include "Marker.h"
 #include "Instrument.h"
 #include "Guitar.h"
+#include "JumpingNote.h"
 
 /**
  * This class represents the center from where the tones are played according to their distance to the center.
@@ -41,6 +43,9 @@ private:
 
 	std::multimap<int, Instrument*> m_instruments; //key: ring, the instrument is on
 	unsigned int m_currentRing;
+
+	std::vector<JumpingNote*> m_playAnimations;
+	void createAnimation(Instrument* i);
 
 	float rate;
 

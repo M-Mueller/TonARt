@@ -25,7 +25,7 @@ void Center::update(std::vector<Marker> marker)
 		if(i->getID() == 626)
 		{
 			this->centralPoint=(*i);
-			//marker.erase(i);
+			marker.erase(i);
 		}
 
 		//if central marker not found->use old information
@@ -60,6 +60,19 @@ void Center::update(std::vector<Marker> marker)
 
 void Center::draw()
 {
+	//draw all play animations or delete them if time is up
+	for(int i=m_playAnimations.size()-1; i>=0; --i)
+	{
+		if(m_playAnimations.at(i)->isDead())
+		{
+			m_playAnimations.erase(m_playAnimations.begin()+i);
+		}
+		else
+		{
+			m_playAnimations.at(i)->draw();
+		}
+	}
+
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
@@ -86,6 +99,7 @@ void Center::play()
 		if( i->first == (int)m_currentRing )
 		{
 			i->second->play();
+			createAnimation(i->second);
 		}
 	}
 	Sleep(200);
@@ -100,6 +114,27 @@ void Center::play()
 
 	if( m_currentRing == numCircles )
 		m_currentRing = 0;
+}
+
+void Center::createAnimation(Instrument* i)
+{
+	cv::Vec3f start=i->getMarker().getPosition();
+
+	//up vector without transformation
+	float directionData[] = {0.0, 0.0, -1.0, 0.0};
+	cv::Mat direction(4,1,CV_32F, directionData);
+
+	//the animation should always float in the up direction of the center
+	cv::Mat transformation(4,4,CV_32F, (void*)centralPoint.getTransformation());
+
+	//apply marker transformation to up vector (only rotation since direction.w=0)
+	cv::Mat directionAR;
+	cv::gemm(transformation, direction, 1.0, cv::Mat::eye(4,4,CV_32F), 0.0, directionAR);
+
+	//convert cv::Mat to cv::Vec3f
+	cv::Vec3f d(directionAR.at<float>(0,0), directionAR.at<float>(0,1), directionAR.at<float>(0,2));
+
+	m_playAnimations.push_back(new JumpingNote(start, d));
 }
 
 
