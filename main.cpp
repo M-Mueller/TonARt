@@ -11,8 +11,8 @@
 #include "Tracking.h"
 #include "Center.h"
 
-Tracking* tracking;
-Center* center;
+Tracking* tracking = NULL;
+Center* center = NULL;
 
 int screenWidth, screenHeight;
 GLuint frameTex;
@@ -49,6 +49,11 @@ int main(int argc, char** argv)
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glGenTextures(1, &frameTex);
+
+#ifdef __APPLE__
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // as 2560 is a multiple of 4
+	glPixelStoref(GL_UNPACK_ROW_LENGTH, 2560 / 3); // to consider each row having this number of pixel
+#endif
 
 	glBindTexture(GL_TEXTURE_2D, frameTex);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -142,6 +147,9 @@ void renderCamImage()
 
 void display()
 {
+	if( tracking == NULL )
+		return;
+
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	renderCamImage();
