@@ -1,9 +1,8 @@
 #include "Center.h"
 
 
-Center::Center()
+Center::Center(unsigned int numCircles, double ringDist) : numCircles(numCircles), ringDist(ringDist)
 {
-
 }
 
 Center::~Center()
@@ -27,7 +26,7 @@ void Center::update(std::vector<Marker> marker)
 	//find intruments
 	for(std::vector<Marker>::iterator i=marker.begin(); i<marker.end(); i++)
 	{
-		int distance = length((*i).getPosition()-centralPoint.getPosition());
+		int distance = length(i->getPosition()-centralPoint.getPosition());
 
 		Guitar g((*i));
 
@@ -52,9 +51,8 @@ void Center::draw()
 
 	glLoadTransposeMatrixf(centralPoint.getTransformation());
 
-	glutSolidTorus(0.001, 0.05, 8, 32);
-	glutSolidTorus(0.001, 0.1, 8, 32);
-	glutSolidTorus(0.001, 0.15, 8, 32);
+	for( unsigned int i=1; i < numCircles + 1; i++ ) 
+		glutSolidTorus(0.001, ringDist * i, 8, 32);
 
 	glPopMatrix();
 }

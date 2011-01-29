@@ -21,7 +21,7 @@
 class Center
 {
 public:
-	Center();
+	Center(unsigned int numCircles=4, double ringDist=0.05);
 	~Center();
 
 	void update(std::vector<Marker> marker);
@@ -31,6 +31,8 @@ public:
 
 private:
 	Marker centralPoint;
+	unsigned int numCircles;
+	double ringDist;
 
 	std::multimap<int, Instrument*> m_song; //key: ring, the instrument is on
 

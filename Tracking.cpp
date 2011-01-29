@@ -17,8 +17,10 @@ Tracking::Tracking():
 		}
 	}
 
+#ifdef DEBUG
 	cv::namedWindow("window", CV_WINDOW_AUTOSIZE);
 	cv::namedWindow("marker", CV_WINDOW_NORMAL);
+#endif
 }
 
 cv::Mat Tracking::getFrame()

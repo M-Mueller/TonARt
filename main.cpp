@@ -57,9 +57,9 @@ int main(int argc, char** argv)
 	glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(GL_SMOOTH);
 	
-	GLfloat light0_pos[4] = {10.0, 10.0, -10.0, 0.0};
-	GLfloat light0_diffuse[4] = {0.6, 0.6, 0.6, 1.0};
-	GLfloat light0_ambient[4] = {0.1, 0.1, 0.1, 1.0};
+	GLfloat light0_pos[4] = {10.0f, 10.0f, -10.0f, 0.0f};
+	GLfloat light0_diffuse[4] = {0.6f, 0.6f, 0.6f, 1.0f};
+	GLfloat light0_ambient[4] = {0.1f, 0.1f, 0.1f, 1.0f};
 
 	glLightfv(GL_LIGHT0, GL_POSITION, light0_pos);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
