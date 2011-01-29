@@ -2,6 +2,8 @@
 #define INSTRUMENT_H_
 
 #include "Marker.h"
+#include <cstdlib>
+#include "RtMidi.h"
 
 class Instrument
 {
@@ -9,8 +11,12 @@ public:
 	Instrument(Marker &m);
 	virtual ~Instrument();
 
-	virtual void draw()=0;
-	virtual void play()=0;
+	virtual void draw();
+	virtual void play();
+	virtual void stopPlaying();
+
+	static RtMidiOut* s_midiout;
+	static bool isMidiConnected;
 };
 
 #endif

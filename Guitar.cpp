@@ -24,6 +24,36 @@ Guitar::~Guitar()
 
 void Guitar::play()
 {
+	std::cout << "Playing guitar..." << std::endl;
+
+	std::vector<unsigned char> message;
+	// Send out a series of MIDI messages.
+	// Program change: 192, 5
+	message.push_back( 0xC0 );
+	message.push_back( 0 );	// Instrument
+	Instrument::s_midiout->sendMessage( &message );
+
+	// Control Change: 176, 7, 100 (volume)
+	message[0] = 0xB0;
+	message[1] = 7;
+	message.push_back( 50 );
+	Instrument::s_midiout->sendMessage( &message );
+
+	// Note On: 144, 64, 90
+	message[0] = 0x90;
+	message[1] = 64;	// tonhöhe
+	message[2] = 64;	// dynamik
+	Instrument::s_midiout->sendMessage( &message );
+
+}
+
+void Guitar::stopPlaying()
+{
+	std::vector<unsigned char> message;
+	message.push_back(0x80);
+	message.push_back(64);	// tonhöhe
+	message.push_back(64);	// dynamik
+	Instrument::s_midiout->sendMessage( &message );
 }
 
 void Guitar::draw()

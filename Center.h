@@ -39,7 +39,8 @@ private:
 	unsigned int numCircles;
 	double ringDist;
 
-	std::multimap<int, Instrument*> m_song; //key: ring, the instrument is on
+	std::multimap<int, Instrument*> m_instruments; //key: ring, the instrument is on
+	unsigned int m_currentRing;
 
 	float rate;
 

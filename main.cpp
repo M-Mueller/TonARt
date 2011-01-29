@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include <GL/glew.h>
 #include <cv.h>
 
@@ -8,8 +7,6 @@
 #else
 #include <GL/glut.h>
 #endif
-
-
 
 #include "Tracking.h"
 #include "Center.h"
@@ -22,6 +19,7 @@ GLuint frameTex;
 
 void display();
 void reshape(int width, int height);
+void staticPlayHelper(int dontCareAboutRhisParam);
 
 int main(int argc, char** argv)
 {
@@ -78,7 +76,18 @@ int main(int argc, char** argv)
 	tracking=new Tracking();
 	center=new Center();
 
+	glutTimerFunc(750,staticPlayHelper,0);
 	glutMainLoop();
+}
+
+void staticPlayHelper(int dontCareAboutRhisParam)
+{
+	glutTimerFunc(750,staticPlayHelper,0);
+
+	if( center == NULL)
+		return;
+
+	center->play();
 }
 
 void timer(int value)

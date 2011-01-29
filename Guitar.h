@@ -9,6 +9,7 @@
 #define BASS_H_
 
 #include <GL/glew.h>
+#include <iostream>
 
 #include "Instrument.h"
 #include "Marker.h"
@@ -31,7 +32,7 @@ public:
 	virtual void getNormals(GLfloat*);
 	virtual int getFaceCount();
 	virtual void getFaces(GLuint*);
-
+	void stopPlaying();
 private:
 	Marker position;
 	Mesh* mesh;
