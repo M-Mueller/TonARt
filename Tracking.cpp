@@ -271,7 +271,7 @@ void Tracking::toCstyle(cv::Point2f* in, CvPoint2D32f* out, int length)
 	}
 }
 
-void Tracking::getMarkers(std::vector<Marker> &markersFound)
+void Tracking::getMarkers(std::list<Marker>& markersFound)
 {
 	cv::Mat frame;
 	(*video) >> frame;

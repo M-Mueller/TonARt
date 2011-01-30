@@ -4,6 +4,9 @@
  *  Created on: 29.01.2011
  *      Author: keen
  */
+#ifdef _MSC_VER 
+#pragma warning(disable:4305)
+#endif
 
 #include "JumpingNote.h"
 
@@ -777,3 +780,6 @@ GLuint JumpingNote::NoteFaces [][3] = {
      {102, 339, 313},
 };
 
+#ifdef _MSC_VER 
+#pragma warning(default:4305)
+#endif

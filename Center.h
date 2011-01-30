@@ -4,6 +4,8 @@
 #include <map>
 #include <iostream>
 #include <vector>
+#include <list>
+#include <boost/thread.hpp>
 
 #include <GL/glew.h>
 #include <cv.h>
@@ -31,7 +33,7 @@ public:
 	Center(unsigned int numCircles=4, double ringDist=0.05);
 	~Center();
 
-	void update(std::vector<Marker> marker);
+	void update(std::list<Marker> marker);
 
 	void draw();
 	void play();
@@ -40,6 +42,7 @@ private:
 	Marker centralPoint;
 	unsigned int numCircles;
 	double ringDist;
+	boost::mutex instr_mutex;
 
 	std::multimap<int, Instrument*> m_instruments; //key: ring, the instrument is on
 	unsigned int m_currentRing;

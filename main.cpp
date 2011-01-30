@@ -1,6 +1,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <cv.h>
+#include <boost/thread.hpp>
 
 #ifdef __APPLE__
 #include <glut.h>
@@ -18,6 +19,7 @@ int screenWidth, screenHeight;
 GLuint frameTex;
 
 void display();
+void track();
 void reshape(int width, int height);
 void staticPlayHelper(int dontCareAboutRhisParam);
 
@@ -37,7 +39,7 @@ int main(int argc, char** argv)
 	}
 
 	glutDisplayFunc(display);
-	glutIdleFunc(display);
+	glutIdleFunc(track);
 	glutReshapeFunc(reshape);
 
 	glEnable(GL_DEPTH_TEST);
@@ -83,6 +85,9 @@ int main(int argc, char** argv)
 
 	glutTimerFunc(750,staticPlayHelper,0);
 	glutMainLoop();
+
+	delete tracking;
+	delete center;
 }
 
 void staticPlayHelper(int dontCareAboutRhisParam)
@@ -92,12 +97,8 @@ void staticPlayHelper(int dontCareAboutRhisParam)
 	if( center == NULL)
 		return;
 
-	center->play();
-}
-
-void timer(int value)
-{
-	return;
+	boost::thread workerThread(&Center::play, center);  
+	
 }
 
 void getTextureParameters(cv::Mat img, GLenum &format, GLenum &type)
@@ -145,10 +146,21 @@ void renderCamImage()
 
 }
 
+void track()
+{
+	//std::cout << "tracking" << std::endl;
+	std::list<Marker> markers;
+	tracking->getMarkers(markers);
+	center->update(markers);
+	glutPostRedisplay();
+}
+
 void display()
 {
 	if( tracking == NULL )
 		return;
+
+	//std::cout << "display" << std::endl;
 
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
@@ -163,12 +175,8 @@ void display()
 	
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	std::vector<Marker> markers;
-	tracking->getMarkers(markers);
-	center->update(markers);
 	center->draw();
 
-	glutTimerFunc(50, timer, 0);
 	glutSwapBuffers();
 }
 

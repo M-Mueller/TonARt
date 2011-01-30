@@ -2,6 +2,7 @@
 #define TRACKING_H_
 
 #include <iostream>
+#include <list>
 
 #include "cv.h"
 #include "highgui.h"
@@ -14,14 +15,14 @@ class Tracking
 {
 public:
 	Tracking();
-	~Tracking();
+	~Tracking(){};
 
 	cv::Mat getFrame();
 
 	/**
 	 * Saves all markers that are found in the current frame into the given vector
 	 */
-	void getMarkers(std::vector<Marker> &m);
+	void getMarkers(std::list<Marker> &m);
 
 private:
 	cv::VideoCapture* video;
