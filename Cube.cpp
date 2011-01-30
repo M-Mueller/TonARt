@@ -64,9 +64,14 @@ void Cube::getVertices(GLfloat* v)
 	}
 }
 
-void Cube::getNormals(GLfloat* n)
+void Cube::getVerticesAndNormals(GLfloat* n)
 {
 
+}
+
+bool Cube::hasNormals()
+{
+	return false;
 }
 
 void Cube::getFaces(GLuint* f)

@@ -19,7 +19,7 @@ Instrument::Instrument(Marker &m)
 			std::cout << nPorts << " available";
 
 			// Open first available port.
-			s_midiout->openPort( 0 );
+			s_midiout->openPort( 5 );
 
 			Instrument::isMidiConnected = true;
 		}

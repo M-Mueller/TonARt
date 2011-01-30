@@ -30,8 +30,9 @@ public:
 
 	virtual int getVertexCount();
 	virtual void getVertices(GLfloat*);
-	virtual void getNormals(GLfloat*);
+	virtual void getVerticesAndNormals(GLfloat*);
 	virtual int getFaceCount();
+	virtual bool hasNormals();
 	virtual void getFaces(GLuint*);
 	void stopPlaying();
 private:
@@ -42,7 +43,7 @@ private:
 	static point3 GuitarVerts[];
 	static int numGuitarFaces;
 	static GLuint GuitarFaces[][3];
-	static point3 CubeVertNorms[];
+	static point3 GuitarVertNorms [];
 };
 
 #endif /* BASS_H_ */

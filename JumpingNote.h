@@ -29,9 +29,10 @@ public:
 
 	virtual int getVertexCount();
 	virtual void getVertices(GLfloat* v);
-	virtual void getNormals(GLfloat* n);
+	virtual void getVerticesAndNormals(GLfloat* n);
 	virtual int getFaceCount();
 	virtual void getFaces(GLuint* f);
+	virtual bool hasNormals();
 
 private:
 	cv::Vec3f currentPos;
@@ -48,6 +49,7 @@ private:
 	static int numNoteFaces;
 	static GLuint NoteFaces [][3];
 	static point3 NoteVerts [];
+	static point3 NoteVertNorms [];
 };
 
 #endif /* JUMPINGNOTE_H_ */
