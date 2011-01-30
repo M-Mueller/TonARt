@@ -1,3 +1,6 @@
+#ifndef MESH_H_
+#define MESH_H_
+
 #include "GL/glew.h"
 
 #include "ObjInterface.h"
@@ -17,3 +20,5 @@ private:
 
 	ObjInterface* data;
 };
+
+#endif
