@@ -38,6 +38,7 @@ private:
 	cv::Point2f getEdgePos(cv::Mat stripe);
 	int subpixSampleSafe ( const IplImage* pSrc, cv::Point2f p );
 	float length(cv::Point p);
+	template<class T>void Tracking::simpleSobel(cv::Mat& img, std::vector<T>& retVal);
 };
 
 #endif

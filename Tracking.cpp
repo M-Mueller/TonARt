@@ -35,6 +35,27 @@ float Tracking::length(cv::Point p)
 	return sqrt((float)(p.x*p.x + p.y*p.y));
 }
 
+// -1 -2 -1
+//  0  0  0
+//  1  2  1
+template<class T>
+void Tracking::simpleSobel(cv::Mat& img, std::vector<T>& retVal)
+{
+	if (img.cols != 3)
+		throw new std::runtime_error("Input image is required to have dimensions 3xN.");
+
+	if ((int) retVal.size() != img.rows - 2)
+		throw new std::runtime_error(
+				"Output vector is required to have the size equal to image height minus 2.");
+
+	for (int i = 1; i < img.rows - 1; i++)
+	{
+		int impls = -img.at<T> (i - 1, 0) - 2 * img.at<T> (i - 1, 1) - img.at<T> (i - 1, 2);
+		impls += img.at<T> (i + 1, 0) + 2 * img.at<T> (i + 1, 1) + img.at<T> (i + 1, 2);
+		retVal[i - 1] = static_cast<T> (std::abs(impls));
+	}
+}
+
 int Tracking::subpixSampleSafe ( const IplImage* pSrc, cv::Point2f p )
 {
 	int x = int( floorf ( p.x ) );
