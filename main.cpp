@@ -98,6 +98,7 @@ void staticPlayHelper(int dontCareAboutRhisParam)
 		return;
 
 	boost::thread workerThread(&Center::play, center);  
+	center->createAnimation();
 	
 }
 
@@ -148,7 +149,6 @@ void renderCamImage()
 
 void track()
 {
-	//std::cout << "tracking" << std::endl;
 	std::list<Marker> markers;
 	tracking->getMarkers(markers);
 	center->update(markers);
@@ -159,8 +159,6 @@ void display()
 {
 	if( tracking == NULL )
 		return;
-
-	//std::cout << "display" << std::endl;
 
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
