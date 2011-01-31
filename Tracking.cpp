@@ -75,7 +75,7 @@ int Tracking::subpixSampleSafe ( const IplImage* pSrc, cv::Point2f p )
 	return a + ( ( dy * ( b - a) ) >> 8 );
 }
 
-cv::Point2f Tracking::getEdgePos(cv::Mat stripe)
+cv::Point2f Tracking::getEdgePos(std::vector<unsigned char>& stripe)
 {
 	double max;
 	cv::Point maximumLoc;
@@ -118,20 +118,21 @@ cv::Point2f Tracking::getSubpixelBorderPosFromStripe(cv::Mat &input, cv::Point2f
 {
 	cv::Point2f stripeStart = divCenter - floor(stripeWidth/2.0)*stripeX - floor(stripeHeight/2.0)*stripeY;	//upper, left corner of the stripe in the original image
 
-	cv::Mat stripe(stripeWidth, stripeHeight, input.type());
+	cv::Mat stripe(stripeHeight, stripeWidth, input.type());
 
 	for(int y=0; y<stripeHeight; y++)
 	{
 		for(int x=0; x<stripeWidth; x++)
 		{
-			stripe.at<unsigned char>(x,y) = subpixSampleSafe(&(IplImage) input, (stripeStart + x*stripeX + y*stripeY));//input.at<char>(QVectorToCvPoint(stripeStart + x*stripeX + y*stripeY));
+			stripe.at<unsigned char>(y,x) = subpixSampleSafe(&(IplImage) input, (stripeStart + x*stripeX + y*stripeY));//input.at<char>(QVectorToCvPoint(stripeStart + x*stripeX + y*stripeY));
 		}
 	}
 
 	cv::Mat stripeSobel(stripe.size().width, stripe.size().height, stripe.type());	//image containing the edge information
+	//cv::filter2D(stripe, stripeSobel, -1, sobelKernel);
 
-	cv::filter2D(stripe, stripeSobel, -1, sobelKernel);
-
+	std::vector<unsigned char> sobelValues(stripe.rows - 2);
+	simpleSobel(stripe, sobelValues);
 	cv::Point2f stripeEdgePos = getEdgePos(stripeSobel); //subpixel edge coordinates in stripe
 
 	return (stripeStart + stripeEdgePos.x*stripeY + stripeEdgePos.y*stripeX);
@@ -145,8 +146,8 @@ cv::Vec4f Tracking::getAccurateBorder(cv::Point start, cv::Point end, cv::Mat &i
 	int stripeWidth=3;
 	int stripeHeight=(int)(0.2 * length(d));
 
-	if(stripeHeight<0.1)	//cv::filter2D crashs with too small values
-		return cv::Vec4f();
+	if(stripeHeight<5)	//cv::filter2D crashs with too small values
+		stripeHeight = 5;
 
 	cv::Point2f stripeX(d.x/length(d), d.y/length(d)); //stripe x orientation
 
