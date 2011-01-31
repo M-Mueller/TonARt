@@ -292,6 +292,24 @@ void Tracking::toCstyle(cv::Point2f* in, CvPoint2D32f* out, int length)
 	}
 }
 
+template<class T>
+unsigned int maxLoc(vector<T> values)
+{
+	T maxVal = std::numeric_limits<T>::min();
+	unsigned int maxLoc = 0;
+
+	for (unsigned int i = 0; i < values.size(); i++)
+	{
+		if (values[i] > maxVal)
+		{
+			maxVal = values[i];
+			maxLoc = i;
+		}
+	}
+
+	return maxLoc;
+}
+
 void Tracking::getMarkers(std::list<Marker>& markersFound)
 {
 	cv::Mat frame;
