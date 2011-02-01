@@ -8,7 +8,7 @@
 class Instrument
 {
 public:
-	Instrument();
+	Instrument(Marker &m);
 	virtual ~Instrument();
 
 	virtual void draw();

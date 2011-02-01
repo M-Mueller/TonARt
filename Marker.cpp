@@ -33,12 +33,12 @@ Marker::~Marker()
 
 }
 
-const cv::Vec3f Marker::getPosition() const
+cv::Vec3f Marker::getPosition() const
 {
 	return cv::Vec3f(m_position[3], m_position[7], m_position[11]);
 }
 
-const bool Marker::isValid()
+bool Marker::isValid()
 {
 	if(m_id!=(unsigned int)-1)
 		return true;
@@ -46,7 +46,7 @@ const bool Marker::isValid()
 		return false;
 }
 
-const unsigned int Marker::getID() const
+unsigned int Marker::getID() const
 {
 	return m_id;
 }

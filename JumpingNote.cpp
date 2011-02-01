@@ -19,7 +19,7 @@ JumpingNote::JumpingNote(cv::Vec3f s, cv::Vec3f d)
 
 JumpingNote::~JumpingNote()
 {
-	delete mesh;
+
 }
 
 void JumpingNote::draw()

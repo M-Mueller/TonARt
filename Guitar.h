@@ -21,7 +21,7 @@ class Guitar
 	: public Instrument, public ObjInterface
 {
 public:
-	Guitar(const Marker &m);
+	Guitar(Marker &m);
 	virtual ~Guitar();
 
 	virtual void draw();

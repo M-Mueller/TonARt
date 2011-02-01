@@ -33,28 +33,22 @@ public:
 	Center(unsigned int numCircles=4, double ringDist=0.05);
 	~Center();
 
-	void update(const std::list<Marker>& marker);
+	void update(std::list<Marker> marker);
 
 	void draw();
-
-	// Load vertices & create vertex buffers, etc...
-	void createAnimation();
-	
-	// play() runs in a different thread and has no OpenGL context
 	void play();
 
 private:
 	Marker centralPoint;
 	unsigned int numCircles;
 	double ringDist;
-	boost::shared_mutex instr_mutex;
+	boost::mutex instr_mutex;
 
 	std::multimap<int, Instrument*> m_instruments; //key: ring, the instrument is on
 	unsigned int m_currentRing;
 
-	std::list<JumpingNote*> m_playAnimations;
-
-	void createJumpingNote(Instrument* i);
+	std::vector<JumpingNote*> m_playAnimations;
+	void createAnimation(Instrument* i);
 
 	float rate;
 

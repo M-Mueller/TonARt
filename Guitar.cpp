@@ -10,8 +10,8 @@
 
 #include "Guitar.h"
 
-Guitar::Guitar(const Marker &m)
-: position(m)
+Guitar::Guitar(Marker &m)
+: Instrument(m), position(m)
 {
 	mesh = new Mesh(this);
 	mesh->init();
@@ -24,7 +24,7 @@ Guitar::~Guitar()
 
 void Guitar::play()
 {
-	//std::cout << "Playing guitar..." << std::endl;
+	std::cout << "Playing guitar..." << std::endl;
 
 	std::vector<unsigned char> message;
 	// Send out a series of MIDI messages.

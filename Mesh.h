@@ -2,7 +2,6 @@
 #define MESH_H_
 
 #include "GL/glew.h"
-#include <iostream>
 
 #include "ObjInterface.h"
 

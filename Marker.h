@@ -24,15 +24,15 @@ public:
 	Marker(const Marker &m);
 	~Marker();
 
-	const unsigned int getID() const;
-	const cv::Vec3f getPosition() const;
-	const cv::Vec3f getRotation() const;
+	unsigned int getID() const;
+	cv::Vec3f getPosition() const;
+	cv::Vec3f getRotation() const;
 	const float* getTransformation() const;
 
 	/**
 	 * Returns false if the marker has an ID of -1, true otherwise
 	 */
-	const bool isValid();
+	bool isValid();
 
 private:
 	unsigned int m_id;

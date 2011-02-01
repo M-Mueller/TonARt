@@ -3,7 +3,7 @@
 RtMidiOut* Instrument::s_midiout = new RtMidiOut("TonARt MIDI Client");
 bool Instrument::isMidiConnected = false;
 
-Instrument::Instrument()
+Instrument::Instrument(Marker &m)
 {
 	if( !isMidiConnected )
 	{

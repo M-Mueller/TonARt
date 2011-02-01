@@ -9,11 +9,6 @@ Mesh::Mesh(ObjInterface* d)
 
 Mesh::~Mesh()
 {
-		GLenum err = glewInit();
-	if (GLEW_OK != err)
-	{
-		std::cout << "GLEW init failed" <<std::endl;
-	}
 	glDeleteBuffers(1, &vbo);
 	glDeleteBuffers(1, &ibo);
 }
@@ -27,7 +22,6 @@ void Mesh::init()
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, data->getVertexCount()*3*sizeof(GLfloat), vertices, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	delete vertices;
 
 	GLuint* faces = new GLuint[data->getFaceCount()*3];
 	data->getFaces(faces);
@@ -36,7 +30,6 @@ void Mesh::init()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->getFaceCount()*3*sizeof(GLuint), faces, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	delete faces;
 }
 
 void Mesh::draw()

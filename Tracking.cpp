@@ -321,7 +321,7 @@ void Tracking::getMarkers(std::list<Marker>& markersFound)
 
 	cv::Mat threshold;
 	//cv::threshold(greyScale, threshold, 128, 255, cv::THRESH_BINARY);
-	cv::adaptiveThreshold(greyScale, threshold, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, 21, 15);
+	cv::adaptiveThreshold(greyScale, threshold, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, 55, 15);
 
 	std::vector<std::vector<cv::Point> > contours;
 	cv::findContours(threshold, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE); //modifies threshold!
