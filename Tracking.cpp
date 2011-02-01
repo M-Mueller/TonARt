@@ -35,27 +35,6 @@ float Tracking::length(cv::Point p)
 	return sqrt((float)(p.x*p.x + p.y*p.y));
 }
 
-// -1 -2 -1
-//  0  0  0
-//  1  2  1
-template<class T>
-void Tracking::simpleSobel(cv::Mat& img, std::vector<T>& retVal)
-{
-	if (img.cols != 3)
-		throw new std::runtime_error("Input image is required to have dimensions 3xN.");
-
-	if ((int) retVal.size() != img.rows - 2)
-		throw new std::runtime_error(
-				"Output vector is required to have the size equal to image height minus 2.");
-
-	for (int i = 1; i < img.rows - 1; i++)
-	{
-		int impls = -img.at<T> (i - 1, 0) - 2 * img.at<T> (i - 1, 1) - img.at<T> (i - 1, 2);
-		impls += img.at<T> (i + 1, 0) + 2 * img.at<T> (i + 1, 1) + img.at<T> (i + 1, 2);
-		retVal[i - 1] = static_cast<T> (std::abs(impls));
-	}
-}
-
 int Tracking::subpixSampleSafe ( const IplImage* pSrc, cv::Point2f p )
 {
 	int x = int( floorf ( p.x ) );
@@ -75,7 +54,7 @@ int Tracking::subpixSampleSafe ( const IplImage* pSrc, cv::Point2f p )
 	return a + ( ( dy * ( b - a) ) >> 8 );
 }
 
-cv::Point2f Tracking::getEdgePos(std::vector<unsigned char>& stripe)
+cv::Point2f Tracking::getEdgePos(cv::Mat stripe)
 {
 	double max;
 	cv::Point maximumLoc;
@@ -118,21 +97,20 @@ cv::Point2f Tracking::getSubpixelBorderPosFromStripe(cv::Mat &input, cv::Point2f
 {
 	cv::Point2f stripeStart = divCenter - floor(stripeWidth/2.0)*stripeX - floor(stripeHeight/2.0)*stripeY;	//upper, left corner of the stripe in the original image
 
-	cv::Mat stripe(stripeHeight, stripeWidth, input.type());
+	cv::Mat stripe(stripeWidth, stripeHeight, input.type());
 
 	for(int y=0; y<stripeHeight; y++)
 	{
 		for(int x=0; x<stripeWidth; x++)
 		{
-			stripe.at<unsigned char>(y,x) = subpixSampleSafe(&(IplImage) input, (stripeStart + x*stripeX + y*stripeY));//input.at<char>(QVectorToCvPoint(stripeStart + x*stripeX + y*stripeY));
+			stripe.at<unsigned char>(x,y) = subpixSampleSafe(&(IplImage) input, (stripeStart + x*stripeX + y*stripeY));//input.at<char>(QVectorToCvPoint(stripeStart + x*stripeX + y*stripeY));
 		}
 	}
 
 	cv::Mat stripeSobel(stripe.size().width, stripe.size().height, stripe.type());	//image containing the edge information
-	//cv::filter2D(stripe, stripeSobel, -1, sobelKernel);
 
-	std::vector<unsigned char> sobelValues(stripe.rows - 2);
-	simpleSobel(stripe, sobelValues);
+	cv::filter2D(stripe, stripeSobel, -1, sobelKernel);
+
 	cv::Point2f stripeEdgePos = getEdgePos(stripeSobel); //subpixel edge coordinates in stripe
 
 	return (stripeStart + stripeEdgePos.x*stripeY + stripeEdgePos.y*stripeX);
@@ -146,8 +124,8 @@ cv::Vec4f Tracking::getAccurateBorder(cv::Point start, cv::Point end, cv::Mat &i
 	int stripeWidth=3;
 	int stripeHeight=(int)(0.2 * length(d));
 
-	if(stripeHeight<5)	//cv::filter2D crashs with too small values
-		stripeHeight = 5;
+	if(stripeHeight<0.1)	//cv::filter2D crashs with too small values
+		return cv::Vec4f();
 
 	cv::Point2f stripeX(d.x/length(d), d.y/length(d)); //stripe x orientation
 
@@ -291,24 +269,6 @@ void Tracking::toCstyle(cv::Point2f* in, CvPoint2D32f* out, int length)
 	{
 		out[i]=cvPoint2D32f(in[i].x, in[i].y);
 	}
-}
-
-template<class T>
-unsigned int maxLoc(vector<T> values)
-{
-	T maxVal = std::numeric_limits<T>::min();
-	unsigned int maxLoc = 0;
-
-	for (unsigned int i = 0; i < values.size(); i++)
-	{
-		if (values[i] > maxVal)
-		{
-			maxVal = values[i];
-			maxLoc = i;
-		}
-	}
-
-	return maxLoc;
 }
 
 void Tracking::getMarkers(std::list<Marker>& markersFound)
