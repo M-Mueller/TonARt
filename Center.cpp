@@ -97,7 +97,7 @@ void Center::play()
 	instr_mutex.lock_shared();
 	for(std::multimap<int,Instrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
 	{
-		std::cout << "instrument in ring: " << i->first << std::endl;
+		//std::cout << "instrument in ring: " << i->first << std::endl;
 		if( i->first == (int)m_currentRing )
 		{
 			i->second->play();

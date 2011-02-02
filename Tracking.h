@@ -35,9 +35,11 @@ private:
 	void getCorners(cv::Vec4f* borders, cv::Point2f* corners);
 	cv::Vec4f getAccurateBorder(cv::Point start, cv::Point end, cv::Mat &input, cv::Mat &output);
 	cv::Point2f getSubpixelBorderPosFromStripe(cv::Mat &input, cv::Point2f divCenter, cv::Point2f stripeX, cv::Point2f stripeY, int stripeWidth, int stripeHeight);
-	cv::Point2f getEdgePos(cv::Mat stripe);
+	cv::Point2f getEdgePos(const cv::Mat& stripe);
 	int subpixSampleSafe ( const IplImage* pSrc, cv::Point2f p );
 	float length(cv::Point p);
+
+	template<class T> void simpleSobel(cv::Mat& img, cv::Mat& outMat);
 };
 
 #endif
