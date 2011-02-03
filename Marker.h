@@ -26,7 +26,7 @@ public:
 
 	unsigned int getID() const;
 	cv::Vec3f getPosition() const;
-	cv::Vec3f getRotation() const;
+	float getRotationAngleZ() const;	//return the counterwise rotation around the Z axis
 	const float* getTransformation() const;
 
 	/**
@@ -37,6 +37,9 @@ public:
 private:
 	unsigned int m_id;
 	float m_position[16];
+
+	float length(cv::Mat v) const;
+	float dot(cv::Mat v1, cv::Mat v2) const;
 };
 
 #endif
