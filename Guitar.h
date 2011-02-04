@@ -5,8 +5,8 @@
  *      Author: keen
  */
 
-#ifndef BASS_H_
-#define BASS_H_
+#ifndef GUITAR_H_
+#define GUITAR_H_
 
 #include <GL/glew.h>
 #include <iostream>
@@ -26,15 +26,17 @@ public:
 
 	virtual void draw();
 	virtual void play();
-	virtual Marker getMarker();
+	void stopPlaying();
+	virtual Marker getMarker() const;
+	virtual int getNote() const;
 
+protected:
 	virtual int getVertexCount();
 	virtual void getVertices(GLfloat*);
 	virtual void getVerticesAndNormals(GLfloat*);
 	virtual int getFaceCount();
 	virtual bool hasNormals();
 	virtual void getFaces(GLuint*);
-	void stopPlaying();
 private:
 	Marker position;
 	Mesh* mesh;
@@ -46,4 +48,4 @@ private:
 	static point3 GuitarVertNorms [];
 };
 
-#endif /* BASS_H_ */
+#endif /* GUITAR_H_ */

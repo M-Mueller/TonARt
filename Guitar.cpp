@@ -58,21 +58,31 @@ void Guitar::stopPlaying()
 
 void Guitar::draw()
 {
+	Instrument::draw();
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
 	glLoadTransposeMatrixf(position.getTransformation());
 
-	glScaled(0.05, 0.05, 0.05);
+	glScaled(0.015, 0.015, 0.015);
+	glTranslated(-1.0, 0.0, 0.0);
+	glRotated(45.0, -0.7, 1.0, 0.0);
+
 	mesh->draw();
 
 	glPopMatrix();
 
 }
 
-Marker Guitar::getMarker()
+Marker Guitar::getMarker() const
 {
 	return position;
+}
+
+int Guitar::getNote() const
+{
+	//TODO stub
+	return 3;
 }
 
 int Guitar::getVertexCount()

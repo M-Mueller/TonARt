@@ -9,6 +9,7 @@ public:
 	Cube();
 	virtual ~Cube();
 
+protected:
 	int getVertexCount(){return numCubeVerts;}
 	int getFaceCount(){return numCubeFaces;}
 	virtual void getVertices(GLfloat*);

@@ -9,7 +9,9 @@
  */
 class ObjInterface
 {
-public:
+	friend class Mesh;
+
+protected:
 	virtual int getVertexCount()=0;
 	virtual void getVertices(GLfloat*)=0;
 	virtual bool hasNormals()=0;
