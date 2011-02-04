@@ -30,6 +30,8 @@ private:
 	static float sobelKernelArray[3][3];
 	cv::Mat sobelKernel;	//sobel filtering kernel
 
+	cv::Mat frame;
+
 	void toCstyle(cv::Point2f* in, CvPoint2D32f* out, int length);
 	unsigned short getMarkerID(cv::Mat &marker, int* rotations);
 	void getCorners(cv::Vec4f* borders, cv::Point2f* corners);
@@ -38,8 +40,6 @@ private:
 	cv::Point2f getEdgePos(const cv::Mat& stripe);
 	int subpixSampleSafe ( const IplImage* pSrc, cv::Point2f p );
 	float length(cv::Point p);
-
-	template<class T> void simpleSobel(cv::Mat& img, cv::Mat& outMat);
 };
 
 #endif

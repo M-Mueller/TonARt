@@ -17,7 +17,7 @@
 #endif
 
 #include "Marker.h"
-#include "Instrument.h"
+#include "MidiInstrument.h"
 #include "Guitar.h"
 #include "JumpingNote.h"
 
@@ -40,8 +40,8 @@ public:
 	// Load vertices & create vertex buffers, etc...
 	void createAnimation();
 	
-	// play() runs in a different thread and has no OpenGL context
-	void play();
+	// runs in a different thread and has no OpenGL context
+	void startMidiOutput();
 
 private:
 	Marker centralPoint;
@@ -49,12 +49,12 @@ private:
 	double ringDist;
 	boost::shared_mutex instr_mutex;
 
-	std::multimap<int, Instrument*> m_instruments; //key: ring, the instrument is on
+	std::multimap<int, MidiInstrument*> m_instruments; //key: ring, the instrument is on
 	unsigned int m_currentRing;
 
 	std::list<JumpingNote*> m_playAnimations;
 
-	void createJumpingNote(Instrument* i);
+	void createJumpingNote(MidiInstrument* i);
 
 	float rate;
 

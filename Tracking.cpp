@@ -1,5 +1,7 @@
 #include "Tracking.h"
 
+//#define CUSTOM_SOBEL 1
+
 float Tracking::sobelKernelArray[3][3] = {{-1.0, 0.0, 1.0}, {-2.0, 0.0, 2.0}, {1.0, 0.0, -1.0}};
 
 Tracking::Tracking():
@@ -16,6 +18,15 @@ Tracking::Tracking():
 			std::cerr << "Could not load video" << std::endl;
 		}
 	}
+	else
+	{
+		video->set(CV_CAP_PROP_FPS, 30.0);
+		video->set(CV_CAP_PROP_FRAME_HEIGHT, 480.0);
+		video->set(CV_CAP_PROP_FRAME_WIDTH, 640.0);
+
+		std::cout << "Capturing " << video->get(CV_CAP_PROP_FRAME_WIDTH) << "x" << video->get(CV_CAP_PROP_FRAME_HEIGHT) 
+			<< " with " << video->get(CV_CAP_PROP_FPS) << " fps." << std::endl;
+	}
 
 #ifdef DEBUG
 	cv::namedWindow("window", CV_WINDOW_AUTOSIZE);
@@ -25,8 +36,8 @@ Tracking::Tracking():
 
 cv::Mat Tracking::getFrame()
 {
-	cv::Mat frame;
-	(*video) >> frame;
+	//cv::Mat frame;
+	//(*video) >> frame;
 	return frame;
 }
 
@@ -58,9 +69,14 @@ cv::Point2f Tracking::getEdgePos(const cv::Mat& stripe)
 {
 	double max;
 	cv::Point maximumLoc;
-	cv::minMaxLoc(stripe, NULL, &max, NULL, &maximumLoc);
 
-	unsigned char y0 = stripe.at<unsigned char>(maximumLoc.y, maximumLoc.x);	//x=0
+	// Only look for sobel maximas in the middle row
+	cv::Mat mask = cv::Mat::zeros(3,stripe.cols,stripe.type());
+	mask.row(1).setTo(cv::Scalar(1.0));
+
+	cv::minMaxLoc(stripe, NULL, &max, NULL, &maximumLoc, mask);
+
+	unsigned char y0 = stripe.at<unsigned char>(maximumLoc);	//x=0
 
 	unsigned char y1;
 	if(maximumLoc.x<stripe.cols-1)
@@ -74,14 +90,6 @@ cv::Point2f Tracking::getEdgePos(const cv::Mat& stripe)
 	else
 		y2 = y0;
 
-	if(! (y0>=y1 && y0>=y2) )	//bug in cv??
-	{
-		return maximumLoc;
-	}
-
-	//f(x) = ax²+bx+c
-	//f'(x) = 2ax+b
-	//maximum: f'(x)=0 => x= -b/2a
 	float a = (float(y2) + float(y1) - 2.0*float(y0) )/2.0;
 	float b = float(y1) - float(y0) - a;
 
@@ -93,33 +101,10 @@ cv::Point2f Tracking::getEdgePos(const cv::Mat& stripe)
 	}
 }
 
-// -1 -2 -1
-//  0  0  0
-//  1  2  1
-template<class T>
-void Tracking::simpleSobel(cv::Mat& img, cv::Mat& outMat)
-{
-	if (img.cols != 3)
-		throw new std::runtime_error("Input image is required to have dimensions 3xN.");
-
-	if (outMat.rows != img.rows - 2)
-		throw new std::runtime_error(
-				"Output mat is required to have the size equal to image height minus 2.");
-
-	for (int i = 1; i < img.cols - 1; i++)
-	{
-		int impls = -img.at<T> (i - 1, 0) - 2 * img.at<T> ( i - 1, 1) - img.at<T> (i - 1,2);
-		impls += img.at<T> (i + 1, 0) + 2 * img.at<T> ( i + 1,1) + img.at<T> (i + 1,2);
-		
-		outMat.at<T>(i - 1,1) = static_cast<T> (std::abs(impls));
-	}
-}
-
 cv::Point2f Tracking::getSubpixelBorderPosFromStripe(cv::Mat &input, cv::Point2f divCenter, cv::Point2f stripeX, cv::Point2f stripeY, int stripeWidth, int stripeHeight)
 {
 	cv::Point2f stripeStart = divCenter - floor(stripeWidth/2.0)*stripeX - floor(stripeHeight/2.0)*stripeY;	//upper, left corner of the stripe in the original image
 
-#ifndef CUSTOM_SOBEL
 	cv::Mat stripe(stripeWidth, stripeHeight, input.type());
 	for(int y=0; y<stripeHeight; y++)
 	{
@@ -128,24 +113,10 @@ cv::Point2f Tracking::getSubpixelBorderPosFromStripe(cv::Mat &input, cv::Point2f
 			stripe.at<unsigned char>(x,y) = subpixSampleSafe(&(IplImage) input, (stripeStart + x*stripeX + y*stripeY));//input.at<char>(QVectorToCvPoint(stripeStart + x*stripeX + y*stripeY));
 		}
 	}
-
-	cv::Mat stripeSobel(stripeHeight, stripeWidth, stripe.type(), cv::Scalar(0.0));	//image containing the edge information
-
-	cv::filter2D(stripe, stripeSobel, -1, sobelKernel);
-
-#else
-	cv::Mat stripe(stripeHeight, stripeWidth, input.type());
-	for(int y=0; y<stripeHeight; y++)
-	{
-		for(int x=0; x<stripeWidth; x++)
-		{
-			stripe.at<unsigned char>(y,x) = subpixSampleSafe(&(IplImage) input, (stripeStart + x*stripeX + y*stripeY));//input.at<char>(QVectorToCvPoint(stripeStart + x*stripeX + y*stripeY));
-		}
-	}
-	cv::Mat stripeSobel(stripeHeight-2, stripeWidth, stripe.type(), cv::Scalar(0.0));
-	simpleSobel<unsigned char>(stripe, stripeSobel);
-#endif CUSTOM_SOBEL
-
+	
+	cv::Mat stripeSobel = cv::Mat::zeros(stripeWidth, stripeHeight, stripe.type());	//image containing the edge information
+	cv::Sobel(stripe, stripeSobel,stripe.type(),1,0);
+	//cv::filter2D(stripe, stripeSobel, -1, sobelKernel);
 	cv::Point2f stripeEdgePos = getEdgePos(stripeSobel); //subpixel edge coordinates in stripe
 
 	return (stripeStart + stripeEdgePos.x*stripeY + stripeEdgePos.y*stripeX);
@@ -308,7 +279,6 @@ void Tracking::toCstyle(cv::Point2f* in, CvPoint2D32f* out, int length)
 
 void Tracking::getMarkers(std::list<Marker>& markersFound)
 {
-	cv::Mat frame;
 	(*video) >> frame;
 
 	cv::Mat greyScale;

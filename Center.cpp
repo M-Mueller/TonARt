@@ -14,7 +14,7 @@ Center::~Center()
 void Center::update(const std::list<Marker>& marker)
 {
 	instr_mutex.lock();
-	for(std::multimap<int,Instrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
+	for(std::multimap<int,MidiInstrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
 	{
 			delete i->second;
 	}
@@ -37,20 +37,8 @@ void Center::update(const std::list<Marker>& marker)
 			Guitar* g = new Guitar(*i);
 
 			instr_mutex.lock();
-			m_instruments.insert(std::pair<int, Instrument*>((int)tmp,g));
+			m_instruments.insert(std::pair<int, MidiInstrument*>((int)tmp,g));
 			instr_mutex.unlock();
-
-			//g->draw();
-
-	//		glMatrixMode(GL_MODELVIEW);
-	//		glPushMatrix();
-	//
-	//		glLoadTransposeMatrixf((*i).getTransformation());
-	//		glLoadMatrixf(matrix);
-	//
-	//		glutSolidSphere(0.01, 8,8);
-	//
-	//		glPopMatrix();
 		}
 	}
 
@@ -58,8 +46,7 @@ void Center::update(const std::list<Marker>& marker)
 
 void Center::draw()
 {
-	//draw all play animations or delete them if time is up
-
+	// draw all play animations or delete them if time is up
 	std::list<JumpingNote*>::iterator iter = m_playAnimations.begin();
 	while (iter != m_playAnimations.end())
 	{
@@ -75,6 +62,15 @@ void Center::draw()
 			++iter;
 		}
 	}
+
+	// draw instruments
+	instr_mutex.lock_shared();
+	for(std::multimap<int,MidiInstrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
+	{
+		i->second->draw();
+	}
+	instr_mutex.unlock_shared();
+
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
@@ -92,12 +88,12 @@ float Center::length(cv::Vec3f v)
 	return sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
 }
 
-void Center::play()
+void Center::startMidiOutput()
 {
 	instr_mutex.lock_shared();
-	for(std::multimap<int,Instrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
+	for(std::multimap<int,MidiInstrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
 	{
-		//std::cout << "instrument in ring: " << i->first << std::endl;
+		
 		if( i->first == (int)m_currentRing )
 		{
 			i->second->play();
@@ -112,7 +108,7 @@ void Center::play()
 #endif
 
 	instr_mutex.lock_shared();
-	for(std::multimap<int,Instrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
+	for(std::multimap<int,MidiInstrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
 	{
 		if( i->first ==(int) m_currentRing )
 			i->second->stopPlaying();
@@ -126,7 +122,7 @@ void Center::play()
 
 }
 
-void Center::createJumpingNote(Instrument* i)
+void Center::createJumpingNote(MidiInstrument* i)
 {
 	cv::Vec3f start=i->getMarker().getPosition();
 
@@ -149,7 +145,7 @@ void Center::createJumpingNote(Instrument* i)
 
 void Center::createAnimation()
 {
-	for(std::multimap<int,Instrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
+	for(std::multimap<int,MidiInstrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
 	{
 		if( i->first == (int)m_currentRing )
 		{

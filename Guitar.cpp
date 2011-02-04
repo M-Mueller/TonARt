@@ -27,19 +27,19 @@ void Guitar::play()
 	std::vector<unsigned char> message;
 	message.push_back( 0xC0 );
 	message.push_back( 0 );	// Instrument
-	Instrument::s_midiout->sendMessage( &message );
+	MidiInstrument::s_midiout->sendMessage( &message );
 
 	// Control Change: 176, 7, 100 (volume)
 	message[0] = 0xB0;
 	message[1] = 7;
 	message.push_back( 50 );
-	Instrument::s_midiout->sendMessage( &message );
+	MidiInstrument::s_midiout->sendMessage( &message );
 
 	// Note On: 144, 64, 90
 	message[0] = 0x90;
 	message[1] = 64;	// tonh�he
 	message[2] = 64;	// dynamik
-	Instrument::s_midiout->sendMessage( &message );
+	MidiInstrument::s_midiout->sendMessage( &message );
 
 }
 
@@ -49,7 +49,7 @@ void Guitar::stopPlaying()
 	message.push_back(0x80);
 	message.push_back(64);	// tonh�he
 	message.push_back(64);	// dynamik
-	Instrument::s_midiout->sendMessage( &message );
+	MidiInstrument::s_midiout->sendMessage( &message );
 }
 
 void Guitar::draw()

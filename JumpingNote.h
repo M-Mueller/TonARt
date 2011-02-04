@@ -14,11 +14,12 @@
 #include "GL/glew.h"
 #include "GL/glut.h"
 #include "ObjInterface.h"
+#include "RenderItem.h"
 #include "Mesh.h"
 
 
 class JumpingNote:
-	public ObjInterface
+	public ObjInterface, public RenderItem
 {
 public:
 	JumpingNote(cv::Vec3f start, cv::Vec3f direction);

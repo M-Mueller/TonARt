@@ -21,7 +21,7 @@ GLuint frameTex;
 void display();
 void track();
 void reshape(int width, int height);
-void staticPlayHelper(int dontCareAboutRhisParam);
+void timerFunc(int dontCareAboutRhisParam);
 
 int main(int argc, char** argv)
 {
@@ -83,21 +83,21 @@ int main(int argc, char** argv)
 	tracking=new Tracking();
 	center=new Center();
 
-	glutTimerFunc(750,staticPlayHelper,0);
+	glutTimerFunc(750,timerFunc,0);
 	glutMainLoop();
 
 	delete tracking;
 	delete center;
 }
 
-void staticPlayHelper(int dontCareAboutRhisParam)
+void timerFunc(int dontCareAboutRhisParam)
 {
-	glutTimerFunc(750,staticPlayHelper,0);
+	glutTimerFunc(750,timerFunc,0);
 
 	if( center == NULL)
 		return;
 
-	boost::thread workerThread(&Center::play, center);  
+	boost::thread workerThread(&Center::startMidiOutput, center);  
 	center->createAnimation();
 	
 }

@@ -11,14 +11,14 @@
 #include <GL/glew.h>
 #include <iostream>
 
-#include "Instrument.h"
+#include "MidiInstrument.h"
 #include "Marker.h"
 #include "Cube.h"
 #include "Mesh.h"
 #include "ObjInterface.h"
 
 class Guitar
-	: public Instrument, public ObjInterface
+	: public MidiInstrument, public ObjInterface
 {
 public:
 	Guitar(const Marker &m);
