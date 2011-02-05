@@ -2,7 +2,7 @@
 
 RtMidiOut* MidiInstrument::s_midiout = new RtMidiOut("TonARt MIDI Client");
 bool MidiInstrument::isMidiConnected = false;
-int MidiInstrument::s_midiNotes[] = {60,62,64,65,67,96,71,72};
+int MidiInstrument::s_midiNotes[] = {60,62,64,65,67,69,71,72};
 
 MidiInstrument::MidiInstrument()
 {

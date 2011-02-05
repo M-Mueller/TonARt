@@ -50,16 +50,6 @@ void Guitar::startMidiOutput()
 
 }
 
-void Guitar::stopMidiOutput()
-{
-	std::cout << "stop playing midi note: " << lastNote << std::endl;
-	std::vector<unsigned char> message;
-	message.push_back(0x80);
-	message.push_back(lastNote);	// tonh�he
-	message.push_back(64);	// dynamik
-	MidiInstrument::s_midiout->sendMessage( &message );
-}
-
 bool Guitar::isDead() const
 {
 	return m_isDead;

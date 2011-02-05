@@ -13,7 +13,6 @@ public:
 
 	virtual void draw(){}
 	virtual void startMidiOutput(){}
-	virtual void stopMidiOutput(){}
 	virtual Marker getMarker(){ return Marker(); }
 
 	static RtMidiOut* s_midiout;

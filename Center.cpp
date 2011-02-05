@@ -101,20 +101,6 @@ void Center::startMidiOutput()
 	}
 	instr_mutex.unlock_shared();
 
-#ifdef _WIN32
-	Sleep(200);
-#else
-	usleep(200000);
-#endif
-
-	instr_mutex.lock_shared();
-	for(std::multimap<int,MidiInstrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
-	{
-		if( i->first ==(int) m_currentRing )
-			i->second->stopMidiOutput();
-	}
-	instr_mutex.unlock_shared();
-
 	m_currentRing++;
 
 	if( m_currentRing == numCircles )
