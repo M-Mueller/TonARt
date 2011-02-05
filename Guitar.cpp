@@ -75,7 +75,8 @@ void Guitar::draw()
 
 	glScaled(0.015, 0.015, 0.015);
 	glTranslated(-1.0, 0.0, 0.0);
-	glRotated(45.0, -0.7, 1.0, 0.0);
+	glRotated(90.0, 1.0, 0.0, 0.0);
+	glRotated(30.0, 0.0, 1.0, 0.0);
 
 	mesh->draw();
 
@@ -85,7 +86,7 @@ void Guitar::draw()
 
 int Guitar::getNote() const
 {
-	return lastNote;
+	return round(((int)position.getRotationAngleZ())/45);
 }
 
 int Guitar::getVertexCount()
