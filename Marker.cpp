@@ -38,6 +38,15 @@ cv::Vec3f Marker::getPosition() const
 	return cv::Vec3f(m_position[3], m_position[7], m_position[11]);
 }
 
+cv::Vec3d Marker::getEulerAnglesXYZ() const
+{
+	cv::Vec3d eulerXYZ;
+	cv::Mat cam, rot, trans, rotx, roty, rotz;
+	cv::Mat proj(3,4,CV_32FC1,(void *)m_position,0);
+	cv::decomposeProjectionMatrix(proj, cam, rot, trans, rotx, roty, rotz, eulerXYZ);
+	return eulerXYZ;
+}
+
 bool Marker::isValid()
 {
 	if(m_id!=(unsigned int)-1)

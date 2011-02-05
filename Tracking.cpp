@@ -18,12 +18,15 @@ Tracking::Tracking():
 	}
 	else
 	{
-		video->set(CV_CAP_PROP_FPS, 30.0);
-		video->set(CV_CAP_PROP_FRAME_HEIGHT, 480.0);
-		video->set(CV_CAP_PROP_FRAME_WIDTH, 640.0);
-
-		std::cout << "Capturing " << video->get(CV_CAP_PROP_FRAME_WIDTH) << "x" << video->get(CV_CAP_PROP_FRAME_HEIGHT) 
-			<< "pixels with " << video->get(CV_CAP_PROP_FPS) << " fps." << std::endl;
+		if( video->set(CV_CAP_PROP_FPS, 30.0) && video->set(CV_CAP_PROP_FRAME_HEIGHT, 480.0) && video->set(CV_CAP_PROP_FRAME_WIDTH, 640.0) )
+		{
+			std::cout << "Capturing " << video->get(CV_CAP_PROP_FRAME_WIDTH) << "x" << video->get(CV_CAP_PROP_FRAME_HEIGHT) 
+				<< "pixels with " << video->get(CV_CAP_PROP_FPS) << " fps." << std::endl;
+		}
+		else
+		{
+			std::cout << "Camera parameters could not be set. Falling back to default settings." << std::endl;
+		}
 	}
 
 #ifdef DEBUG

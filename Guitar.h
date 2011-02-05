@@ -25,7 +25,9 @@ public:
 	virtual ~Guitar();
 
 	virtual void draw();
-	virtual void play();
+	virtual bool isDead() const;
+	virtual void isDead(bool isdead);
+	
 	virtual Marker getMarker();
 
 	virtual int getVertexCount();
@@ -33,10 +35,14 @@ public:
 	virtual void getNormals(GLfloat*);
 	virtual int getFaceCount();
 	virtual void getFaces(GLuint*);
-	void stopPlaying();
+	
+	virtual void startMidiOutput();
+	void stopMidiOutput();
 private:
 	Marker position;
 	Mesh* mesh;
+	int lastNote;
+	bool m_isDead;
 
 	static int numGuitarVerts;
 	static point3 GuitarVerts[];

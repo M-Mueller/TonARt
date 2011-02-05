@@ -12,12 +12,13 @@ public:
 	virtual ~MidiInstrument(){};
 
 	virtual void draw(){}
-	virtual void play(){}
-	virtual void stopPlaying(){}
+	virtual void startMidiOutput(){}
+	virtual void stopMidiOutput(){}
 	virtual Marker getMarker(){ return Marker(); }
 
 	static RtMidiOut* s_midiout;
 	static bool isMidiConnected;
+	static int MidiInstrument::s_midiNotes[];
 };
 
 #endif

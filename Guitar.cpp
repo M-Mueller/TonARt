@@ -11,7 +11,7 @@
 #include "Guitar.h"
 
 Guitar::Guitar(const Marker &m)
-: position(m)
+: position(m), lastNote(0), m_isDead(false)
 {
 	mesh = new Mesh(this);
 	mesh->init();
@@ -22,8 +22,15 @@ Guitar::~Guitar()
 	delete mesh;
 }
 
-void Guitar::play()
+// For a midi "note number" <--> "note name" <--> "frequency" table , see http://tonalsoft.com/pub/news/pitch-bend.aspx
+void Guitar::startMidiOutput()
 {
+	double zDegrees = position.getEulerAnglesXYZ()[2] + 180.0;
+	double step = zDegrees / 45.0;
+
+	lastNote = MidiInstrument::s_midiNotes[(int)step];
+	std::cout << "zDegrees: " << zDegrees << std::endl << "step: " << step << std::endl << "midi note. " << lastNote << std::endl;
+
 	std::vector<unsigned char> message;
 	message.push_back( 0xC0 );
 	message.push_back( 0 );	// Instrument
@@ -37,20 +44,33 @@ void Guitar::play()
 
 	// Note On: 144, 64, 90
 	message[0] = 0x90;
-	message[1] = 64;	// tonh�he
+	message[1] = lastNote;	// tonhoehe
 	message[2] = 64;	// dynamik
 	MidiInstrument::s_midiout->sendMessage( &message );
 
 }
 
-void Guitar::stopPlaying()
+void Guitar::stopMidiOutput()
 {
+	std::cout << "stop playing midi note: " << lastNote << std::endl;
 	std::vector<unsigned char> message;
 	message.push_back(0x80);
-	message.push_back(64);	// tonh�he
+	message.push_back(lastNote);	// tonh�he
 	message.push_back(64);	// dynamik
 	MidiInstrument::s_midiout->sendMessage( &message );
 }
+
+bool Guitar::isDead() const
+{
+	return m_isDead;
+}
+
+void Guitar::isDead(bool isdead)
+{
+	m_isDead = isdead;
+}
+
+
 
 void Guitar::draw()
 {

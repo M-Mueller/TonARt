@@ -27,6 +27,7 @@ public:
 	unsigned int getID() const;
 	cv::Vec3f getPosition() const;
 	cv::Vec3f getRotation() const;
+	cv::Vec3d Marker::getEulerAnglesXYZ() const;
 	const float* getTransformation() const;
 
 	/**

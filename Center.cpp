@@ -96,7 +96,7 @@ void Center::startMidiOutput()
 		
 		if( i->first == (int)m_currentRing )
 		{
-			i->second->play();
+			i->second->startMidiOutput();
 		}
 	}
 	instr_mutex.unlock_shared();
@@ -111,7 +111,7 @@ void Center::startMidiOutput()
 	for(std::multimap<int,MidiInstrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
 	{
 		if( i->first ==(int) m_currentRing )
-			i->second->stopPlaying();
+			i->second->stopMidiOutput();
 	}
 	instr_mutex.unlock_shared();
 
