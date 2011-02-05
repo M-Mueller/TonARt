@@ -1,7 +1,5 @@
 #include "Tracking.h"
 
-//#define CUSTOM_SOBEL 1
-
 float Tracking::sobelKernelArray[3][3] = {{-1.0, 0.0, 1.0}, {-2.0, 0.0, 2.0}, {1.0, 0.0, -1.0}};
 
 Tracking::Tracking():
@@ -25,7 +23,7 @@ Tracking::Tracking():
 		video->set(CV_CAP_PROP_FRAME_WIDTH, 640.0);
 
 		std::cout << "Capturing " << video->get(CV_CAP_PROP_FRAME_WIDTH) << "x" << video->get(CV_CAP_PROP_FRAME_HEIGHT) 
-			<< " with " << video->get(CV_CAP_PROP_FPS) << " fps." << std::endl;
+			<< "pixels with " << video->get(CV_CAP_PROP_FPS) << " fps." << std::endl;
 	}
 
 #ifdef DEBUG
@@ -36,8 +34,6 @@ Tracking::Tracking():
 
 cv::Mat Tracking::getFrame()
 {
-	//cv::Mat frame;
-	//(*video) >> frame;
 	return frame;
 }
 
