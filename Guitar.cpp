@@ -10,8 +10,8 @@
 
 #include "Guitar.h"
 
-Guitar::Guitar(Marker &m)
-: Instrument(m), position(m)
+Guitar::Guitar(const Marker &m)
+: position(m), lastNote(0), m_isDead(false)
 {
 	mesh = new Mesh(this);
 	mesh->init();
@@ -22,43 +22,52 @@ Guitar::~Guitar()
 	delete mesh;
 }
 
-void Guitar::play()
+// For a midi "note number" <--> "note name" <--> "frequency" table , see http://tonalsoft.com/pub/news/pitch-bend.aspx
+void Guitar::startMidiOutput()
 {
-	std::cout << "Playing guitar..." << std::endl;
+	double zDegrees = position.getEulerAnglesXYZ()[2] + 180.0;
+	double step = zDegrees / 45.0;
+
+	lastNote = MidiInstrument::s_midiNotes[(int)step];
+	std::cout << "zDegrees: " << zDegrees << std::endl << "step: " << step << std::endl << "midi note. " << lastNote << std::endl;
 
 	std::vector<unsigned char> message;
-	// Send out a series of MIDI messages.
-	// Program change: 192, 5
 	message.push_back( 0xC0 );
 	message.push_back( 0 );	// Instrument
-	Instrument::s_midiout->sendMessage( &message );
+	MidiInstrument::s_midiout->sendMessage( &message );
 
 	// Control Change: 176, 7, 100 (volume)
 	message[0] = 0xB0;
 	message[1] = 7;
 	message.push_back( 50 );
-	Instrument::s_midiout->sendMessage( &message );
+	MidiInstrument::s_midiout->sendMessage( &message );
 
 	// Note On: 144, 64, 90
 	message[0] = 0x90;
-	message[1] = 64;	// tonh�he
+	message[1] = lastNote;	// tonhoehe
 	message[2] = 64;	// dynamik
-	Instrument::s_midiout->sendMessage( &message );
+	MidiInstrument::s_midiout->sendMessage( &message );
 
 }
 
-void Guitar::stopPlaying()
+bool Guitar::isDead() const
 {
-	std::vector<unsigned char> message;
-	message.push_back(0x80);
-	message.push_back(64);	// tonh�he
-	message.push_back(64);	// dynamik
-	Instrument::s_midiout->sendMessage( &message );
+	return m_isDead;
+}
+
+void Guitar::isDead(bool isdead)
+{
+	m_isDead = isdead;
+}
+
+Marker Guitar::getMarker() const
+{
+	return position;
 }
 
 void Guitar::draw()
 {
-	Instrument::draw();
+	MidiInstrument::draw();
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
@@ -74,15 +83,9 @@ void Guitar::draw()
 
 }
 
-Marker Guitar::getMarker() const
-{
-	return position;
-}
-
 int Guitar::getNote() const
 {
-	//TODO stub
-	return 3;
+	return lastNote;
 }
 
 int Guitar::getVertexCount()

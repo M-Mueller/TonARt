@@ -4,6 +4,9 @@
  *  Created on: 29.01.2011
  *      Author: keen
  */
+#ifdef _MSC_VER 
+#pragma warning(disable:4305)
+#endif
 
 #include "JumpingNote.h"
 
@@ -1429,3 +1432,6 @@ point3 JumpingNote::NoteVertNorms [] = {
 	     {0.0332385331854345, -0.0802447590525157, 0.996220848284297},
 	};
 
+#ifdef _MSC_VER 
+#pragma warning(default:4305)
+#endif

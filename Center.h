@@ -4,6 +4,8 @@
 #include <map>
 #include <iostream>
 #include <vector>
+#include <list>
+#include <boost/thread.hpp>
 
 #include <GL/glew.h>
 #include <cv.h>
@@ -15,7 +17,7 @@
 #endif
 
 #include "Marker.h"
-#include "Instrument.h"
+#include "MidiInstrument.h"
 #include "Guitar.h"
 #include "JumpingNote.h"
 
@@ -31,21 +33,28 @@ public:
 	Center(unsigned int numCircles=4, double ringDist=0.05);
 	~Center();
 
-	void update(std::vector<Marker> marker);
+	void update(const std::list<Marker>& marker);
 
 	void draw();
-	void play();
+
+	// Load vertices & create vertex buffers, etc...
+	void createAnimation();
+	
+	// runs in a different thread and has no OpenGL context
+	void startMidiOutput();
 
 private:
 	Marker centralPoint;
 	unsigned int numCircles;
 	double ringDist;
+	boost::shared_mutex instr_mutex;
 
-	std::multimap<int, Instrument*> m_instruments; //key: ring, the instrument is on
+	std::multimap<int, MidiInstrument*> m_instruments; //key: ring, the instrument is on
 	unsigned int m_currentRing;
 
-	std::vector<JumpingNote*> m_playAnimations;
-	void createAnimation(Instrument* i);
+	std::list<JumpingNote*> m_playAnimations;
+
+	void createJumpingNote(MidiInstrument* i);
 
 	float rate;
 

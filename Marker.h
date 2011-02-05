@@ -26,7 +26,11 @@ public:
 
 	unsigned int getID() const;
 	cv::Vec3f getPosition() const;
+
 	float getRotationAngleZ() const;	//return the counterwise rotation around the Z axis
+
+	cv::Vec3f getRotation() const;
+	cv::Vec3d getEulerAnglesXYZ() const;
 	const float* getTransformation() const;
 
 	/**

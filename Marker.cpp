@@ -74,6 +74,15 @@ float Marker::getRotationAngleZ() const
 	return angle;
 }
 
+cv::Vec3d Marker::getEulerAnglesXYZ() const
+{
+	cv::Vec3d eulerXYZ;
+	cv::Mat cam, rot, trans, rotx, roty, rotz;
+	cv::Mat proj(3,4,CV_32FC1,(void *)m_position,0);
+	cv::decomposeProjectionMatrix(proj, cam, rot, trans, rotx, roty, rotz, eulerXYZ);
+	return eulerXYZ;
+}
+
 bool Marker::isValid()
 {
 	if(m_id!=(unsigned int)-1)

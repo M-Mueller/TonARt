@@ -16,6 +16,18 @@ Tracking::Tracking():
 			std::cerr << "Could not load video" << std::endl;
 		}
 	}
+	else
+	{
+		if( video->set(CV_CAP_PROP_FPS, 30.0) && video->set(CV_CAP_PROP_FRAME_HEIGHT, 480.0) && video->set(CV_CAP_PROP_FRAME_WIDTH, 640.0) )
+		{
+			std::cout << "Capturing " << video->get(CV_CAP_PROP_FRAME_WIDTH) << "x" << video->get(CV_CAP_PROP_FRAME_HEIGHT) 
+				<< "pixels with " << video->get(CV_CAP_PROP_FPS) << " fps." << std::endl;
+		}
+		else
+		{
+			std::cout << "Camera parameters could not be set. Falling back to default settings." << std::endl;
+		}
+	}
 
 #ifdef DEBUG
 	cv::namedWindow("window", CV_WINDOW_AUTOSIZE);
@@ -25,8 +37,6 @@ Tracking::Tracking():
 
 cv::Mat Tracking::getFrame()
 {
-	cv::Mat frame;
-	(*video) >> frame;
 	return frame;
 }
 
@@ -54,13 +64,18 @@ int Tracking::subpixSampleSafe ( const IplImage* pSrc, cv::Point2f p )
 	return a + ( ( dy * ( b - a) ) >> 8 );
 }
 
-cv::Point2f Tracking::getEdgePos(cv::Mat stripe)
+cv::Point2f Tracking::getEdgePos(const cv::Mat& stripe)
 {
 	double max;
 	cv::Point maximumLoc;
-	cv::minMaxLoc(stripe, NULL, &max, NULL, &maximumLoc);
 
-	unsigned char y0 = stripe.at<unsigned char>(maximumLoc.y, maximumLoc.x);	//x=0
+	// Only look for sobel maximas in the middle row
+	cv::Mat mask = cv::Mat::zeros(3,stripe.cols,stripe.type());
+	mask.row(1).setTo(cv::Scalar(1.0));
+
+	cv::minMaxLoc(stripe, NULL, &max, NULL, &maximumLoc, mask);
+
+	unsigned char y0 = stripe.at<unsigned char>(maximumLoc);	//x=0
 
 	unsigned char y1;
 	if(maximumLoc.x<stripe.cols-1)
@@ -74,22 +89,14 @@ cv::Point2f Tracking::getEdgePos(cv::Mat stripe)
 	else
 		y2 = y0;
 
-	if(! (y0>=y1 && y0>=y2) )	//bug in cv??
-	{
-		return maximumLoc;
-	}
-
-	//f(x) = ax²+bx+c
-	//f'(x) = 2ax+b
-	//maximum: f'(x)=0 => x= -b/2a
-	float a = (float(y2) + float(y1) - 2.0f*float(y0) )/2.0f;
+	float a = (float(y2) + float(y1) - 2.0*float(y0) )/2.0;
 	float b = float(y1) - float(y0) - a;
 
 	if(a==0)
 		return maximumLoc;
 	else
 	{
-		return cv::Point2f(maximumLoc.x-((float)b/(2.0f*a)), (float)maximumLoc.y);
+		return cv::Point2f(maximumLoc.x-(b/(2.0*a)), maximumLoc.y);
 	}
 }
 
@@ -98,7 +105,6 @@ cv::Point2f Tracking::getSubpixelBorderPosFromStripe(cv::Mat &input, cv::Point2f
 	cv::Point2f stripeStart = divCenter - floor(stripeWidth/2.0)*stripeX - floor(stripeHeight/2.0)*stripeY;	//upper, left corner of the stripe in the original image
 
 	cv::Mat stripe(stripeWidth, stripeHeight, input.type());
-
 	for(int y=0; y<stripeHeight; y++)
 	{
 		for(int x=0; x<stripeWidth; x++)
@@ -106,11 +112,10 @@ cv::Point2f Tracking::getSubpixelBorderPosFromStripe(cv::Mat &input, cv::Point2f
 			stripe.at<unsigned char>(x,y) = subpixSampleSafe(&(IplImage) input, (stripeStart + x*stripeX + y*stripeY));//input.at<char>(QVectorToCvPoint(stripeStart + x*stripeX + y*stripeY));
 		}
 	}
-
-	cv::Mat stripeSobel(stripe.size().width, stripe.size().height, stripe.type());	//image containing the edge information
-
-	cv::filter2D(stripe, stripeSobel, -1, sobelKernel);
-
+	
+	cv::Mat stripeSobel = cv::Mat::zeros(stripeWidth, stripeHeight, stripe.type());	//image containing the edge information
+	cv::Sobel(stripe, stripeSobel,stripe.type(),1,0);
+	//cv::filter2D(stripe, stripeSobel, -1, sobelKernel);
 	cv::Point2f stripeEdgePos = getEdgePos(stripeSobel); //subpixel edge coordinates in stripe
 
 	return (stripeStart + stripeEdgePos.x*stripeY + stripeEdgePos.y*stripeX);
@@ -124,8 +129,8 @@ cv::Vec4f Tracking::getAccurateBorder(cv::Point start, cv::Point end, cv::Mat &i
 	int stripeWidth=3;
 	int stripeHeight=(int)(0.2 * length(d));
 
-	if(stripeHeight<0.1)	//cv::filter2D crashs with too small values
-		return cv::Vec4f();
+	if(stripeHeight < 5)	//cv::filter2D crashs with too small values
+		stripeHeight = 5;
 
 	cv::Point2f stripeX(d.x/length(d), d.y/length(d)); //stripe x orientation
 
@@ -271,9 +276,8 @@ void Tracking::toCstyle(cv::Point2f* in, CvPoint2D32f* out, int length)
 	}
 }
 
-void Tracking::getMarkers(std::vector<Marker> &markersFound)
+void Tracking::getMarkers(std::list<Marker>& markersFound)
 {
-	cv::Mat frame;
 	(*video) >> frame;
 
 	cv::Mat greyScale;
@@ -281,7 +285,7 @@ void Tracking::getMarkers(std::vector<Marker> &markersFound)
 
 	cv::Mat threshold;
 	//cv::threshold(greyScale, threshold, 128, 255, cv::THRESH_BINARY);
-	cv::adaptiveThreshold(greyScale, threshold, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, 55, 15);
+	cv::adaptiveThreshold(greyScale, threshold, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, 21, 15);
 
 	std::vector<std::vector<cv::Point> > contours;
 	cv::findContours(threshold, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE); //modifies threshold!
