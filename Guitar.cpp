@@ -33,7 +33,7 @@ void Guitar::startMidiOutput()
 
 	std::vector<unsigned char> message;
 	message.push_back( 0xC0 );
-	message.push_back( 0 );	// Instrument
+	message.push_back( 25 );	// Instrument
 	MidiInstrument::s_midiout->sendMessage( &message );
 
 	// Control Change: 176, 7, 100 (volume)
