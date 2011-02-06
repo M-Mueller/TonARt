@@ -52,9 +52,8 @@ void Piano::draw(const Marker& centralpoint)
 
 	glLoadTransposeMatrixf(position.getTransformation());
 
-	glScaled(0.015, 0.015, 0.015);
-	glTranslated(-1.0, 0.0, 0.0);
-	glRotated(45.0, -0.7, 1.0, 0.0);
+	glScaled(0.2, 0.2, 0.2);
+	glRotated(-90.0, 1.0, 0.0, 0.0);
 
 	mesh->draw();
 

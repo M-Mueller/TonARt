@@ -79,6 +79,8 @@ int main(int argc, char** argv)
 
 	glEnable(GL_LIGHT0);
 
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
 	//init marker tracking
 	tracking=new Tracking();
 	center=new Center(6);

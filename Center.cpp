@@ -34,10 +34,22 @@ void Center::update(const std::list<Marker>& marker)
 			double safeDist = ringDist / 2.0;
 			float tmp = (distance / ringDist) - 1.0f;
 
-			Piano* g = new Piano(*i);
+			MidiInstrument* instrument;
+
+			switch (i->getID()) {
+				case 1680:
+					instrument = new Piano(*i);
+					break;
+				case 7236:
+					instrument = new Guitar(*i);
+					break;
+				default:
+					instrument = new Piano(*i);
+			}
+
 
 			instr_mutex.lock();
-			m_instruments.insert(std::pair<int, MidiInstrument*>((int)tmp,g));
+			m_instruments.insert(std::pair<int, MidiInstrument*>((int)tmp,instrument));
 			instr_mutex.unlock();
 		}
 	}

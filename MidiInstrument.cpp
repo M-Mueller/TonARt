@@ -38,9 +38,10 @@ void MidiInstrument::draw(const Marker& centralpoint)
 	cv::Mat camToCenter(4,4,CV_32FC1, (void*)centralpoint.getTransformation());
 	cv::Mat centralToInstrument = camToCenter.inv() * camToInstrument;
 
-	glLoadTransposeMatrixf((float*)centralToInstrument.data);
+	//glLoadTransposeMatrixf((float*)centralToInstrument.data);
+	glLoadTransposeMatrixf((float*)getMarker().getTransformation());
 
-	glScalef(0.002, 0.002, 0.002);
+	glScalef(0.004, 0.004, 0.004);
 	drawGamut();
 	drawNote(getNote());
 

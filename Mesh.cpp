@@ -80,7 +80,6 @@ bool Mesh::load(std::string filename)
 	glNewList(dList, GL_COMPILE);
 
 	glBegin(GL_TRIANGLES);
-	glColor4d(1.0, 1.0, 1.0, 1.0);
 	std::vector<Face>::iterator iterF;
 	for (iterF = faces.begin(); iterF < faces.end(); iterF++)
 	{
