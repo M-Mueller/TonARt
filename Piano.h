@@ -17,12 +17,9 @@ public:
 	Piano(const Marker &m);
 	virtual ~Piano();
 
-	virtual void draw();
+	virtual void draw(const Marker& centralpoint);
 	virtual Marker getMarker() const;
 	virtual int getNote() const;
-
-	virtual bool isDead() const;
-	virtual void isDead(bool isdead);
 
 	virtual void startMidiOutput();
 	void stopMidiOutput();
@@ -30,6 +27,7 @@ public:
 private:
 	Marker position;
 	Mesh* mesh;
+
 	int lastNote;
 	bool m_isDead;
 };

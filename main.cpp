@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 
 	//init marker tracking
 	tracking=new Tracking();
-	center=new Center();
+	center=new Center(6);
 
 	glutTimerFunc(750,timerFunc,0);
 	glutMainLoop();

@@ -10,6 +10,7 @@
 
 #include <GL/glew.h>
 #include <iostream>
+#include <math.h>
 
 #include "MidiInstrument.h"
 #include "Marker.h"
@@ -23,12 +24,9 @@ public:
 	Guitar(const Marker &m);
 	virtual ~Guitar();
 
-	virtual void draw();
+	virtual void draw(const Marker& centralpoint);
 	virtual Marker getMarker() const;
 	virtual int getNote() const;
-
-	virtual bool isDead() const;
-	virtual void isDead(bool isdead);
 	
 	virtual void startMidiOutput();
 	void stopMidiOutput();
@@ -36,6 +34,7 @@ public:
 private:
 	Marker position;
 	Mesh* mesh;
+
 	int lastNote;
 	bool m_isDead;
 };

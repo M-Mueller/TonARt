@@ -5,7 +5,7 @@
 #include "Piano.h"
 
 Piano::Piano(const Marker &m)
-: position(m), lastNote(0), m_isDead(false)
+: position(m)
 {
 	mesh = new Mesh();
 	mesh->load("piano.obj");
@@ -19,15 +19,9 @@ Piano::~Piano()
 // For a midi "note number" <--> "note name" <--> "frequency" table , see http://tonalsoft.com/pub/news/pitch-bend.aspx
 void Piano::startMidiOutput()
 {
-	double zDegrees = position.getEulerAnglesXYZ()[2] + 180.0;
-	double step = zDegrees / 45.0;
-
-	lastNote = MidiInstrument::s_midiNotes[(int)step];
-	std::cout << "zDegrees: " << zDegrees << std::endl << "step: " << step << std::endl << "midi note. " << lastNote << std::endl;
-
 	std::vector<unsigned char> message;
 	message.push_back( 0xC0 );
-	message.push_back( 25 );	// Instrument
+	message.push_back( 0 );	// Instrument
 	MidiInstrument::s_midiout->sendMessage( &message );
 
 	// Control Change: 176, 7, 100 (volume)
@@ -38,30 +32,21 @@ void Piano::startMidiOutput()
 
 	// Note On: 144, 64, 90
 	message[0] = 0x90;
-	message[1] = lastNote;	// tonhoehe
+	message[1] = MidiInstrument::s_midiNotes[getNote()];	// tonhoehe
 	message[2] = 64;	// dynamik
 	MidiInstrument::s_midiout->sendMessage( &message );
 
 }
 
-bool Piano::isDead() const
-{
-	return m_isDead;
-}
-
-void Piano::isDead(bool isdead)
-{
-	m_isDead = isdead;
-}
 
 Marker Piano::getMarker() const
 {
 	return position;
 }
 
-void Piano::draw()
+void Piano::draw(const Marker& centralpoint)
 {
-	MidiInstrument::draw();
+	MidiInstrument::draw(centralpoint);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 

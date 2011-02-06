@@ -14,7 +14,7 @@ public:
 	MidiInstrument();
 	virtual ~MidiInstrument(){};
 
-	virtual void draw();
+	virtual void draw(const Marker& centralpoint);
 	virtual void startMidiOutput(){}
 	virtual Marker getMarker() const =0;
 	virtual int getNote() const =0;

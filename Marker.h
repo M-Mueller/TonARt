@@ -1,6 +1,10 @@
 #ifndef MARKER_H_
 #define MARKER_H_
 
+#ifdef _WIN32
+#include "util.h"
+#endif
+
 #include <iostream>
 
 #include "cv.h"
@@ -28,6 +32,7 @@ public:
 	cv::Vec3f getPosition() const;
 
 	float getRotationAngleZ() const;	//return the counterwise rotation around the Z axis
+	float getRotationAngleZ(float* trans) const;
 
 	cv::Vec3f getRotation() const;
 	cv::Vec3d getEulerAnglesXYZ() const;

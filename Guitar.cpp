@@ -11,7 +11,7 @@
 #include "Guitar.h"
 
 Guitar::Guitar(const Marker &m)
-: position(m), lastNote(0), m_isDead(false)
+: position(m)
 {
 	mesh = new Mesh();
 	mesh->load("guitar.obj");
@@ -25,12 +25,6 @@ Guitar::~Guitar()
 // For a midi "note number" <--> "note name" <--> "frequency" table , see http://tonalsoft.com/pub/news/pitch-bend.aspx
 void Guitar::startMidiOutput()
 {
-	double zDegrees = position.getEulerAnglesXYZ()[2] + 180.0;
-	double step = zDegrees / 45.0;
-
-	lastNote = MidiInstrument::s_midiNotes[(int)step];
-	std::cout << "zDegrees: " << zDegrees << std::endl << "step: " << step << std::endl << "midi note. " << lastNote << std::endl;
-
 	std::vector<unsigned char> message;
 	message.push_back( 0xC0 );
 	message.push_back( 25 );	// Instrument
@@ -44,20 +38,10 @@ void Guitar::startMidiOutput()
 
 	// Note On: 144, 64, 90
 	message[0] = 0x90;
-	message[1] = lastNote;	// tonhoehe
+	message[1] = MidiInstrument::s_midiNotes[getNote()];	// tonhoehe
 	message[2] = 64;	// dynamik
 	MidiInstrument::s_midiout->sendMessage( &message );
 
-}
-
-bool Guitar::isDead() const
-{
-	return m_isDead;
-}
-
-void Guitar::isDead(bool isdead)
-{
-	m_isDead = isdead;
 }
 
 Marker Guitar::getMarker() const
@@ -65,9 +49,9 @@ Marker Guitar::getMarker() const
 	return position;
 }
 
-void Guitar::draw()
+void Guitar::draw(const Marker& centralpoint)
 {
-	MidiInstrument::draw();
+	MidiInstrument::draw(centralpoint);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
