@@ -32,11 +32,13 @@ public:
 	cv::Vec3f getPosition() const;
 
 	float getRotationAngleZ() const;	//return the counterwise rotation around the Z axis
-	float getRotationAngleZ(float* trans) const;
+	static float getRotationAngleZ(float* trans);
 
 	cv::Vec3f getRotation() const;
 	cv::Vec3d getEulerAnglesXYZ() const;
 	const float* getTransformation() const;
+
+		static float length(cv::Mat v);
 
 	/**
 	 * Returns false if the marker has an ID of -1, true otherwise
@@ -47,7 +49,7 @@ private:
 	unsigned int m_id;
 	float m_position[16];
 
-	float length(cv::Mat v) const;
+
 	float dot(cv::Mat v1, cv::Mat v2) const;
 };
 

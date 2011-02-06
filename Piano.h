@@ -14,10 +14,10 @@
 class Piano: public MidiInstrument
 {
 public:
-	Piano(const Marker &m);
+	Piano(const Marker &m, const Marker& centralpoint);
 	virtual ~Piano();
 
-	virtual void draw(const Marker& centralpoint);
+	virtual void draw();
 	virtual Marker getMarker() const;
 	virtual int getNote() const;
 
@@ -26,7 +26,9 @@ public:
 
 private:
 	Marker position;
+	Marker m_centralpoint;
 	Mesh* mesh;
+
 
 	int lastNote;
 	bool m_isDead;

@@ -4,8 +4,8 @@
 
 #include "Piano.h"
 
-Piano::Piano(const Marker &m)
-: position(m)
+Piano::Piano(const Marker &m, const Marker& cp)
+: position(m), m_centralpoint(cp)
 {
 	mesh = new Mesh();
 	mesh->load("piano.obj");
@@ -44,9 +44,9 @@ Marker Piano::getMarker() const
 	return position;
 }
 
-void Piano::draw(const Marker& centralpoint)
+void Piano::draw()
 {
-	MidiInstrument::draw(centralpoint);
+	MidiInstrument::draw();
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
@@ -63,7 +63,11 @@ void Piano::draw(const Marker& centralpoint)
 
 int Piano::getNote() const
 {
-	return round(((int)position.getRotationAngleZ())/45);
+	cv::Mat camToInstrument(4,4,CV_32FC1, (void*)getMarker().getTransformation());
+	cv::Mat camToCenter(4,4,CV_32FC1, (void*)m_centralpoint.getTransformation());
+	cv::Mat centralToInstrument = camToCenter.inv() * camToInstrument;
+
+	return round((Marker::getRotationAngleZ((float*)centralToInstrument.data))/45);
 }
 
 #ifdef _MSC_VER

@@ -154,7 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Center.h" />
-    <ClInclude Include="Cube.h" />
     <ClInclude Include="graphicsDefs.h" />
     <ClInclude Include="Guitar.h" />
     <ClInclude Include="MidiInstrument.h" />
@@ -180,7 +179,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Center.cpp" />
-    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Guitar.cpp" />
     <ClCompile Include="MidiInstrument.cpp" />
     <ClCompile Include="JumpingNote.cpp" />

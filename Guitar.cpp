@@ -10,8 +10,8 @@
 
 #include "Guitar.h"
 
-Guitar::Guitar(const Marker &m)
-: position(m)
+Guitar::Guitar(const Marker &m, const Marker& cp)
+: position(m),  m_centralpoint(cp)
 {
 	mesh = new Mesh();
 	mesh->load("guitar.obj");
@@ -49,9 +49,9 @@ Marker Guitar::getMarker() const
 	return position;
 }
 
-void Guitar::draw(const Marker& centralpoint)
+void Guitar::draw()
 {
-	MidiInstrument::draw(centralpoint);
+	MidiInstrument::draw();
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
@@ -68,7 +68,11 @@ void Guitar::draw(const Marker& centralpoint)
 
 int Guitar::getNote() const
 {
-	return round(((int)position.getRotationAngleZ())/45);
+	cv::Mat camToInstrument(4,4,CV_32FC1, (void*)getMarker().getTransformation());
+	cv::Mat camToCenter(4,4,CV_32FC1, (void*)m_centralpoint.getTransformation());
+	cv::Mat centralToInstrument = camToCenter.inv() * camToInstrument;
+
+	return round(((int)Marker::getRotationAngleZ((float*)centralToInstrument.data))/45);
 }
 
 #ifdef _MSC_VER 

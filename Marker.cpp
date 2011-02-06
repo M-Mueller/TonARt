@@ -38,7 +38,7 @@ cv::Vec3f Marker::getPosition() const
 	return cv::Vec3f(m_position[3], m_position[7], m_position[11]);
 }
 
-float Marker::length(cv::Mat v) const
+float Marker::length(cv::Mat v)
 {
 	return sqrt((float) (v.at<float>(0,0)*v.at<float>(0,0)+v.at<float>(0,1)*v.at<float>(0,1)+v.at<float>(0,2)*v.at<float>(0,2)));
 }
@@ -74,7 +74,7 @@ float Marker::getRotationAngleZ() const
 	return angle;
 }
 
-float Marker::getRotationAngleZ(float* trans) const
+float Marker::getRotationAngleZ(float* trans)
 {
 	//basic idea: multiply (0,1,0) with transformation matrix, project the resulting vector to the xy-plane
 	//and calculate the angle between this vector and (0,1,0)
@@ -83,7 +83,7 @@ float Marker::getRotationAngleZ(float* trans) const
 	cv::Mat initial(4,1,CV_32F, data);
 
 	//the animation should always float in the up direction of the center
-	cv::Mat transformation(4,4,CV_32F, (void*)getTransformation());
+	cv::Mat transformation(4,4,CV_32F, (void*)trans);
 
 	//apply marker transformation to up vector (only rotation since direction.w=0)
 	cv::Mat transformed;

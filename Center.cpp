@@ -38,16 +38,16 @@ void Center::update(const std::list<Marker>& marker)
 
 			switch (i->getID()) {
 				case 1680:
-					instrument = new Piano(*i);
+					instrument = new Piano(*i, centralPoint);
 					break;
 				case 7236:
-					instrument = new Guitar(*i);
+					instrument = new Guitar(*i, centralPoint);
 					break;
 				case 2884:
 					instrument = new Drums(*i);
 					break;
 				default:
-					instrument = new Piano(*i);
+					instrument = new Piano(*i, centralPoint);
 			}
 
 
@@ -83,7 +83,7 @@ void Center::draw()
 	for(std::multimap<int,MidiInstrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
 	{
 		//i->second->draw();
-		i->second->draw(centralPoint);
+		i->second->draw();
 	}
 	instr_mutex.unlock_shared();
 
