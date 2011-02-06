@@ -20,10 +20,10 @@ class Guitar
 	: public MidiInstrument
 {
 public:
-	Guitar(const Marker &m);
+	Guitar(const Marker &m,  const Marker& centralpoint);
 	virtual ~Guitar();
 
-	virtual void draw(const Marker& centralpoint);
+	virtual void draw();
 	virtual Marker getMarker() const;
 	virtual int getNote() const;
 	
@@ -32,6 +32,7 @@ public:
 	
 private:
 	Marker position;
+	Marker m_centralpoint;
 	Mesh* mesh;
 
 	int lastNote;

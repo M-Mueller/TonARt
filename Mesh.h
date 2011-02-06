@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
+#include <string>
 
 #include <GL/glut.h>
 
