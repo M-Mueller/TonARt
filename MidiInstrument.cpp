@@ -29,12 +29,16 @@ MidiInstrument::MidiInstrument()
 	}
 }
 
-void MidiInstrument::draw()
+void MidiInstrument::draw(const Marker& centralpoint)
 {
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
-	glLoadTransposeMatrixf(getMarker().getTransformation());
+	cv::Mat camToInstrument(4,4,CV_32FC1, (void*)getMarker().getTransformation());
+	cv::Mat camToCenter(4,4,CV_32FC1, (void*)centralpoint.getTransformation());
+	cv::Mat centralToInstrument = camToCenter.inv() * camToInstrument;
+
+	glLoadTransposeMatrixf((float*)centralToInstrument.data);
 
 	glScalef(0.002, 0.002, 0.002);
 	drawGamut();

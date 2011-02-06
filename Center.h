@@ -19,6 +19,7 @@
 #include "Marker.h"
 #include "MidiInstrument.h"
 #include "Guitar.h"
+#include "Piano.h"
 #include "JumpingNote.h"
 
 /**

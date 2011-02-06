@@ -34,7 +34,7 @@ void Center::update(const std::list<Marker>& marker)
 			double safeDist = ringDist / 2.0;
 			float tmp = (distance / ringDist) - 1.0f;
 
-			Guitar* g = new Guitar(*i);
+			Piano* g = new Piano(*i);
 
 			instr_mutex.lock();
 			m_instruments.insert(std::pair<int, MidiInstrument*>((int)tmp,g));
@@ -67,7 +67,8 @@ void Center::draw()
 	instr_mutex.lock_shared();
 	for(std::multimap<int,MidiInstrument*>::iterator i=m_instruments.begin(); i != m_instruments.end(); i++)
 	{
-		i->second->draw();
+		//i->second->draw();
+		i->second->draw(centralPoint);
 	}
 	instr_mutex.unlock_shared();
 
