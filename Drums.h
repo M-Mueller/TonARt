@@ -14,10 +14,10 @@
 class Drums: public MidiInstrument
 {
 public:
-	Drums(const Marker &m);
+	Drums(const Marker &m, const Marker& cp);
 	virtual ~Drums();
 
-	virtual void draw(const Marker& centralpoint);
+	virtual void draw();
 	virtual Marker getMarker() const;
 	virtual int getNote() const;
 
@@ -26,6 +26,7 @@ public:
 
 private:
 	Marker position;
+	Marker m_centralpoint;
 	Mesh* mesh;
 
 	int lastNote;

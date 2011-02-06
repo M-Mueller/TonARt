@@ -10,8 +10,8 @@
 
 #include "Drums.h"
 
-Drums::Drums(const Marker &m)
-: position(m)
+Drums::Drums(const Marker &m, const Marker& cp)
+: position(m), m_centralpoint(cp)
 {
 	mesh = new Mesh();
 	mesh->load("drums.obj");
@@ -50,9 +50,9 @@ Marker Drums::getMarker() const
 	return position;
 }
 
-void Drums::draw(const Marker& centralpoint)
+void Drums::draw()
 {
-	MidiInstrument::draw(centralpoint);
+	MidiInstrument::draw();
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
@@ -69,7 +69,11 @@ void Drums::draw(const Marker& centralpoint)
 
 int Drums::getNote() const
 {
-	return round(((int)position.getRotationAngleZ())/45);
+	cv::Mat camToInstrument(4,4,CV_32FC1, (void*)getMarker().getTransformation());
+	cv::Mat camToCenter(4,4,CV_32FC1, (void*)m_centralpoint.getTransformation());
+	cv::Mat centralToInstrument = camToCenter.inv() * camToInstrument;
+
+	return round((Marker::getRotationAngleZ((float*)centralToInstrument.data))/45);
 }
 
 #ifdef _MSC_VER

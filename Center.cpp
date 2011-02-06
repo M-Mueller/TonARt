@@ -44,7 +44,7 @@ void Center::update(const std::list<Marker>& marker)
 					instrument = new Guitar(*i, centralPoint);
 					break;
 				case 2884:
-					instrument = new Drums(*i);
+					instrument = new Drums(*i, centralPoint);
 					break;
 				default:
 					instrument = new Piano(*i, centralPoint);
