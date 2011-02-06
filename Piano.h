@@ -9,10 +9,9 @@
 #define PIANO_H_
 
 #include "MidiInstrument.h"
-#include "ObjInterface.h"
 #include "Mesh.h"
 
-class Piano: public MidiInstrument, public ObjInterface
+class Piano: public MidiInstrument
 {
 public:
 	Piano(const Marker &m);
@@ -28,25 +27,11 @@ public:
 	virtual void startMidiOutput();
 	void stopMidiOutput();
 
-protected:
-	virtual int getVertexCount();
-	virtual void getVertices(GLfloat*);
-	virtual void getVerticesAndNormals(GLfloat*);
-	virtual int getFaceCount();
-	virtual bool hasNormals();
-	virtual void getFaces(GLuint*);
-
 private:
 	Marker position;
 	Mesh* mesh;
 	int lastNote;
 	bool m_isDead;
-
-	static int numPianoVerts;
-	static point3 PianoVerts[];
-	static int numPianoFaces;
-	static GLuint PianoFaces[][3];
-	static point3 PianoVertNorms [];
 };
 
 #endif /* PIANO_H_ */

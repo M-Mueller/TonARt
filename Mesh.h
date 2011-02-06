@@ -1,24 +1,48 @@
 #ifndef MESH_H_
 #define MESH_H_
 
-#include "GL/glew.h"
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cstdlib>
 
-#include "ObjInterface.h"
+#include <GL/glut.h>
 
 class Mesh
 {
+	struct Vertex
+	{
+		float x,y,z;
+	};
+
+	struct Normal
+	{
+		float x,y,z;
+	};
+
+	struct Face
+	{
+		int vertex1, vertex2, vertex3;
+		int normal1, normal2, normal3;
+	};
+
 public:
-	Mesh(ObjInterface* d);
+	Mesh();
 	virtual ~Mesh();
 
-	void init();
+	bool load(std::string filename);
 	void draw();
 
 private:
-	GLuint vbo;
-	GLuint ibo;
+	GLuint dList; //display list
 
-	ObjInterface* data;
+	std::vector<Vertex> vertices;
+	std::vector<Normal> normals;
+	std::vector<Face> faces;
+
+	void addVertex(std::string data);
+	void addNormal(std::string data);
+	void addFace(std::string data);
 };
 
 #endif

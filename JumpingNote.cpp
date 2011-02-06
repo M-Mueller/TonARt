@@ -13,8 +13,8 @@
 JumpingNote::JumpingNote(cv::Vec3f s, cv::Vec3f d)
 : currentPos(s), direction(d), speed(0.02), liveTime(0), maxLiveTime(1), lastDraw(0)
 {
-	mesh = new Mesh(this);
-	mesh->init();
+	mesh = new Mesh();
+	mesh->load("note.obj");
 }
 
 JumpingNote::~JumpingNote()
