@@ -14,7 +14,6 @@
 
 #include "MidiInstrument.h"
 #include "Marker.h"
-#include "Cube.h"
 #include "Mesh.h"
 
 class Guitar

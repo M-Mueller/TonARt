@@ -13,12 +13,10 @@
 #include <iostream>
 #include "GL/glew.h"
 #include "GL/glut.h"
-#include "ObjInterface.h"
 #include "Mesh.h"
 
 
-class JumpingNote:
-	public ObjInterface
+class JumpingNote
 {
 public:
 	JumpingNote(cv::Vec3f start, cv::Vec3f direction);
@@ -26,13 +24,6 @@ public:
 
 	void draw();
 	bool isDead();
-
-	virtual int getVertexCount();
-	virtual void getVertices(GLfloat* v);
-	virtual void getVerticesAndNormals(GLfloat* n);
-	virtual int getFaceCount();
-	virtual void getFaces(GLuint* f);
-	virtual bool hasNormals();
 
 private:
 	cv::Vec3f currentPos;
@@ -44,12 +35,6 @@ private:
 	int liveTime;
 	int maxLiveTime;
 	unsigned int lastDraw;
-
-	static int numNoteVerts;
-	static int numNoteFaces;
-	static GLuint NoteFaces [][3];
-	static point3 NoteVerts [];
-	static point3 NoteVertNorms [];
 };
 
 #endif /* JUMPINGNOTE_H_ */
