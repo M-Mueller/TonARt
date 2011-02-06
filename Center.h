@@ -20,6 +20,7 @@
 #include "MidiInstrument.h"
 #include "Guitar.h"
 #include "Piano.h"
+#include "Drums.h"
 #include "JumpingNote.h"
 
 /**

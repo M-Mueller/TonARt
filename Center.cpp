@@ -43,6 +43,9 @@ void Center::update(const std::list<Marker>& marker)
 				case 7236:
 					instrument = new Guitar(*i);
 					break;
+				case 2884:
+					instrument = new Drums(*i);
+					break;
 				default:
 					instrument = new Piano(*i);
 			}
@@ -90,9 +93,17 @@ void Center::draw()
 
 	glLoadTransposeMatrixf(centralPoint.getTransformation());
 
-	for( unsigned int i=1; i < numCircles + 1; i++ ) 
-		glutSolidTorus(0.001, ringDist * i, 8, 32);
+	for( unsigned int i=1; i < numCircles + 1; i++ )
+	{
+		if(i==m_currentRing)
+			glColor4d(1.0, 0.0, 0.0, 1.0);
+		else
+			glColor4d(1.0, 1.0, 1.0, 1.0);
 
+		glutSolidTorus(0.001, ringDist * i, 8, 32);
+	}
+
+	glColor4d(1.0, 1.0, 1.0, 1.0);
 	glPopMatrix();
 }
 
